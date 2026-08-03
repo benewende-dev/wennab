@@ -18,16 +18,17 @@ corpus of francophone enterprise documents, the register the model was actually 
 
 Generated with `wennab corpus` from
 [`registries/enterprise-fr.toml`](../registries/enterprise-fr.toml): 184 documents, 180 kB,
-55 % French, 18 genres across 18 West and Central African cities, fixed seed.
+56 % French, 18 genres across 18 West and Central African cities, fixed seed.
 
 Size was chosen by measurement, not preference. Hand-written text is a fixed quantity, so
-lengthening the corpus only repeats it:
+lengthening the corpus only repeats it. Reproduce the table with
+`wennab corpus registries/enterprise-fr.toml --bytes=N --seed=20260803`:
 
-| corpus size | 4-gram diversity |
-|---|---|
-| 330 kB | 0.380 |
-| 240 kB | 0.432 |
-| **180 kB** | **0.489** |
+| corpus size | documents | 4-gram diversity |
+|---|---|---|
+| 330 kB | 338 | 0.387 |
+| 240 kB | 246 | 0.439 |
+| **180 kB** | **184** | **0.495** |
 
 We kept the shortest, which still yields 88 chunks of 512 tokens against the 80 of the calibration
 being replaced. A matrix estimated on repetition over-weights whatever repeats.

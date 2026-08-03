@@ -52,10 +52,11 @@ def _strings(objet) -> list[str]:
     return []
 
 
-def load_exams(chemins: list[pathlib.Path]) -> list[tuple[str, str]]:
+def load_exams(chemins: list[pathlib.Path] | list[str]) -> list[tuple[str, str]]:
     """(label, text) for everything the corpus must stay clear of."""
     epreuves: list[tuple[str, str]] = []
     for chemin in chemins:
+        chemin = pathlib.Path(chemin)
         brut = chemin.read_text(encoding="utf-8")
         if chemin.suffix == ".json":
             for i, s in enumerate(_strings(json.loads(brut))):
@@ -88,6 +89,13 @@ def longest_shared(a: list[str], b: list[str], plafond: int = 40) -> tuple[int, 
 
 
 def check(corpus: str, epreuves: list[tuple[str, str]], n: int = 8) -> dict:
+    """Zero exams is not a pass.
+
+    A file with no readable text — the wrong key, a results dump instead of the
+    prompts, a path that expanded to nothing — produces zero collisions, and a
+    tool that answered "clean" there would be lying in exactly the way this one
+    exists to prevent. It is reported as a failure.
+    """
     mots_corpus = words(corpus)
     grammes_corpus = ngrams(mots_corpus, n)
 
@@ -114,7 +122,7 @@ def check(corpus: str, epreuves: list[tuple[str, str]], n: int = 8) -> dict:
         "longest_sequence": record[1],
         "longest_exam": record[2],
         "per_exam": lignes,
-        "clean": collisions == 0,
+        "clean": collisions == 0 and len(epreuves) > 0,
     }
 
 
@@ -134,6 +142,13 @@ def report(r: dict, verbeux: bool = False) -> str:
         elif e["longest"] >= 6:
             detail = f"  ← « {e['sequence']} »"
         lignes.append(f"  {marque} {e['exam']:<34} max {e['longest']:>2} words{detail}")
+
+    if r["exams"] == 0:
+        return "\n".join(lignes + [
+            "✗ no exam text was read. Nothing was compared, so this is not a pass.",
+            "  Check the paths, and that the files hold prompts rather than results:",
+            "  strings shorter than 8 words are skipped, since they cannot collide at n=8.",
+        ])
 
     lignes.append(f"\nlongest shared run, all exams : {r['longest_overall']} words "
                   f"({r['longest_exam']})")

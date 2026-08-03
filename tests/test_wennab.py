@@ -13,7 +13,7 @@ import textwrap
 
 import pytest
 
-from wennab import corpus, guard, paired
+from wennab import cli, corpus, guard, paired
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 
@@ -99,6 +99,22 @@ def test_json_lu_en_profondeur(tmp_path):
     assert any(EXTRAIT in t for _, t in epreuves)
 
 
+def test_aucune_epreuve_lue_nest_pas_un_succes(tmp_path):
+    """The failure that would make this tool worse than useless.
+
+    A results dump instead of the prompts, or a path that expanded to nothing,
+    yields zero collisions. Answering "clean" there is the exact lie `guard`
+    exists to prevent.
+    """
+    resultats = tmp_path / "samples.jsonl"
+    resultats.write_text('{"doc_id": 0, "acc_norm": 1.0}\n')
+    r = guard.check("Un corpus quelconque, en français, de longueur raisonnable.",
+                    guard.load_exams([resultats]))
+    assert r["exams"] == 0
+    assert not r["clean"], "zero exams read must not report as a pass"
+    assert "not a pass" in guard.report(r)
+
+
 def test_plus_longue_sequence_rapportee(tmp_path):
     epreuve = tmp_path / "e.txt"
     epreuve.write_text("alpha bravo charlie delta echo foxtrot")
@@ -171,6 +187,29 @@ def test_dossier_accepte_a_la_place_du_fichier(tmp_path):
     dossier.mkdir()
     _run(dossier, "x", [1, 1, 0])
     assert len(paired.outcomes(dossier)) == 3
+
+
+# —————————————————————————————————— cli ———————————————————————————————————
+
+@pytest.mark.parametrize("commande", ["twin", "guard", "paired"])
+def test_sans_argument_affiche_l_usage(commande, capsys):
+    """No command may answer a missing argument with a traceback."""
+    assert cli.main([commande]) == 2
+    assert "usage:" in capsys.readouterr().err
+
+
+def test_commande_inconnue(capsys):
+    assert cli.main(["quantize"]) == 2
+    assert "unknown command" in capsys.readouterr().err
+
+
+def test_diversite_annoncee_dans_le_readme():
+    """The three figures the README and the case study publish, recomputed."""
+    registre = corpus.load(RACINE / "registries" / "enterprise-fr.toml")
+    attendu = {330_000: 0.387, 240_000: 0.439, 180_000: 0.495}
+    for octets, valeur in attendu.items():
+        _, stats = corpus.generate(registre, octets, 20260803)
+        assert stats["diversity_4gram"] == valeur, f"{octets} B no longer yields {valeur}"
 
 
 def test_cas_reel_du_depot():

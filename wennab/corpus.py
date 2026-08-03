@@ -23,7 +23,7 @@ the method's ceiling, and `--report` measures it rather than assuming it —
 On size: hand-written text is a fixed quantity, so lengthening the corpus only
 repeats it, and a matrix estimated on repetition over-weights whatever repeats.
 Measure diversity at two or three sizes and keep the shortest that still gives
-you enough chunks. Ours: 330 kB → 0.380, 240 kB → 0.432, 180 kB → 0.489.
+you enough chunks. Ours: 330 kB → 0.387, 240 kB → 0.439, 180 kB → 0.495.
 """
 from __future__ import annotations
 
@@ -42,7 +42,8 @@ class RegistryError(ValueError):
     """The registry file is missing something the generator needs."""
 
 
-def load(chemin: pathlib.Path) -> dict:
+def load(chemin: pathlib.Path | str) -> dict:
+    chemin = pathlib.Path(chemin)
     registre = tomllib.loads(chemin.read_text(encoding="utf-8"))
     for cle in ("entities", "genres"):
         if cle not in registre:

@@ -91,8 +91,8 @@ $ wennab corpus registries/enterprise-fr.toml --bytes=180000 > corpus.txt
 
 Diversity is printed, not assumed, because it is the ceiling on what this method can do.
 **Hand-written text is a fixed quantity: lengthening the corpus only repeats it**, and a matrix
-estimated on repetition over-weights whatever repeats. Measured on ours — 330 kB → 0.380,
-240 kB → 0.432, 180 kB → 0.489 — so we shipped the shortest of the three, which still gives 88
+estimated on repetition over-weights whatever repeats. Measured on ours — 330 kB → 0.387,
+240 kB → 0.439, 180 kB → 0.495 — so we shipped the shortest of the three, which still gives 88
 chunks against the 80 of the calibration we were replacing.
 
 `registries/enterprise-fr.toml` ships as a worked example: 18 genres of francophone West African
@@ -117,6 +117,10 @@ Exit code 1 on a collision, so it drops straight into a pipeline. Eight consecut
 coincide between independent texts even in the same register — and the longest shared run is
 printed either way, because a clean pass at n=8 does not tell you whether you cleared it by a mile
 or by one word.
+
+Reading **zero** exam text is also reported as a failure, not a pass. A wrong path, or a results
+dump handed over instead of the prompts, produces zero collisions — and a tool that answered
+"clean" there would be lying in exactly the way this one exists to prevent.
 
 ## `wennab paired` — compare question by question
 
@@ -198,6 +202,7 @@ wennab --help
 # or from a clone, no install:
 git clone https://github.com/benewende-dev/wennab && cd wennab
 python -m wennab.cli twin reference.gguf candidate.gguf
+python -m pytest tests/          # 25 tests, well under a second
 ```
 
 Python 3.11+. `gguf` is the only dependency and only `twin` needs it — the other three read plain

@@ -36,8 +36,9 @@ class MismatchedRuns(ValueError):
     """The two runs did not see the same questions, so they cannot be paired."""
 
 
-def _fichier(chemin: pathlib.Path) -> pathlib.Path:
+def _fichier(chemin: pathlib.Path | str) -> pathlib.Path:
     """Accept a directory, a glob, or the jsonl itself."""
+    chemin = pathlib.Path(chemin)
     if chemin.is_file():
         return chemin
     candidats = sorted(glob.glob(str(chemin / "**" / "samples_*.jsonl"), recursive=True))
@@ -47,7 +48,7 @@ def _fichier(chemin: pathlib.Path) -> pathlib.Path:
     return pathlib.Path(candidats[-1])
 
 
-def outcomes(chemin: pathlib.Path, metric: str = "acc_norm") -> dict[str, bool]:
+def outcomes(chemin: pathlib.Path | str, metric: str = "acc_norm") -> dict[str, bool]:
     """Question id → right/wrong.
 
     Keyed by document id rather than by position: two runs can order their

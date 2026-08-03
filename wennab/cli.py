@@ -44,6 +44,11 @@ def _guard(argv: list[str]) -> int:
 
 
 def _twin(argv: list[str]) -> int:
+    if not argv or argv[0].startswith("--"):
+        print("usage: wennab twin <reference.gguf> <candidate.gguf>\n"
+              "       wennab twin <reference.gguf> --emit <types.txt> [--baseline=<b.gguf>]",
+              file=sys.stderr)
+        return 2
     reference = pathlib.Path(argv[0])
     if "--emit" in argv:
         cible = argv[argv.index("--emit") + 1]
