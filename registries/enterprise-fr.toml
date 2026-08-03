@@ -1,0 +1,1814 @@
+# Enterprise documents, francophone West Africa, French and English.
+#
+# Converted from the registry used in the case study. Every sentence was
+# written by hand; the generator only draws and fills. Placeholders are
+# whatever [entities] and [numbers] define below.
+
+name = "enterprise-fr"
+description = "Supplier contracts, minutes, memos, quotations, tenders, HR and analysis — francophone West African SMEs, French and English."
+languages = ["fr", "en"]
+
+[entities]
+ville = [
+  "Abidjan",
+  "Ouagadougou",
+  "Dakar",
+  "Bamako",
+  "Lomé",
+  "Cotonou",
+  "Accra",
+  "Douala",
+  "Yaoundé",
+  "Niamey",
+  "Conakry",
+  "Bobo-Dioulasso",
+  "Kumasi",
+  "San-Pédro",
+  "Thiès",
+  "Korhogo",
+  "Parakou",
+  "Garoua",
+]
+ville2 = [
+  "Abidjan",
+  "Ouagadougou",
+  "Dakar",
+  "Bamako",
+  "Lomé",
+  "Cotonou",
+  "Accra",
+  "Douala",
+  "Yaoundé",
+  "Niamey",
+  "Conakry",
+  "Bobo-Dioulasso",
+  "Kumasi",
+  "San-Pédro",
+  "Thiès",
+  "Korhogo",
+  "Parakou",
+  "Garoua",
+]
+societe = [
+  "Sahel Distribution",
+  "Kadi & Fils",
+  "Ivoire Logistique",
+  "Faso Matériaux",
+  "Atlantique Négoce",
+  "Zongo Transit",
+  "Delta Agro",
+  "Nord Équipements",
+  "Sika Industries",
+  "Wend-Panga BTP",
+  "Baobab Services",
+  "Lagune Froid",
+  "Sourou Semences",
+  "Kola Pharma",
+  "Tanoé Emballages",
+  "Mistral Marine",
+  "Sahara Telecom",
+  "Palmier Agroalimentaire",
+  "Comoé Textiles",
+  "Volta Énergie",
+  "Bandama Câbles",
+  "Karité Cosmétiques",
+]
+societe2 = [
+  "Sahel Distribution",
+  "Kadi & Fils",
+  "Ivoire Logistique",
+  "Faso Matériaux",
+  "Atlantique Négoce",
+  "Zongo Transit",
+  "Delta Agro",
+  "Nord Équipements",
+  "Sika Industries",
+  "Wend-Panga BTP",
+  "Baobab Services",
+  "Lagune Froid",
+  "Sourou Semences",
+  "Kola Pharma",
+  "Tanoé Emballages",
+  "Mistral Marine",
+  "Sahara Telecom",
+  "Palmier Agroalimentaire",
+  "Comoé Textiles",
+  "Volta Énergie",
+  "Bandama Câbles",
+  "Karité Cosmétiques",
+]
+personne = [
+  "M. Ouédraogo",
+  "Mme Koné",
+  "M. Diallo",
+  "Mme Traoré",
+  "M. Zongo",
+  "Mme Sanogo",
+  "M. Kouassi",
+  "Mme Bamba",
+  "M. Sawadogo",
+  "Mme Nikiéma",
+  "M. Compaoré",
+  "Mme Yaméogo",
+  "M. Doumbia",
+  "Mme Cissé",
+  "M. Tapsoba",
+  "Mme Sy",
+  "M. Anyanwu",
+  "Mme Mensah",
+  "M. Boadi",
+  "Mme Owusu",
+]
+personne2 = [
+  "M. Ouédraogo",
+  "Mme Koné",
+  "M. Diallo",
+  "Mme Traoré",
+  "M. Zongo",
+  "Mme Sanogo",
+  "M. Kouassi",
+  "Mme Bamba",
+  "M. Sawadogo",
+  "Mme Nikiéma",
+  "M. Compaoré",
+  "Mme Yaméogo",
+  "M. Doumbia",
+  "Mme Cissé",
+  "M. Tapsoba",
+  "Mme Sy",
+  "M. Anyanwu",
+  "Mme Mensah",
+  "M. Boadi",
+  "Mme Owusu",
+]
+service = [
+  "la direction commerciale",
+  "le service achats",
+  "la direction financière",
+  "le service logistique",
+  "la direction des ressources humaines",
+  "le service qualité",
+  "la direction technique",
+  "le service juridique",
+  "le contrôle de gestion",
+  "le service après-vente",
+]
+produit = [
+  "ciment CPJ 35",
+  "tôles bac alu",
+  "huile de palme raffinée",
+  "engrais NPK",
+  "câbles cuivre 2,5 mm²",
+  "groupes électrogènes 15 kVA",
+  "riz brisé 25 %",
+  "emballages carton triple cannelure",
+  "pneus poids lourd 315/80",
+  "chambres froides 12 m³",
+  "sacs polypropylène tissés",
+  "tubes PVC ⌀110",
+  "panneaux solaires 450 Wc",
+  "batteries à décharge lente 200 Ah",
+  "gasoil non routier",
+  "semences de maïs certifiées",
+]
+good = [
+  "cement",
+  "roofing sheets",
+  "refined palm oil",
+  "fertiliser",
+  "copper cable",
+  "15 kVA generator sets",
+  "broken rice",
+  "corrugated packaging",
+  "heavy-goods tyres",
+  "cold rooms",
+  "woven polypropylene sacks",
+  "PVC piping",
+  "450 Wp solar panels",
+  "deep-cycle batteries",
+]
+mois = [
+  "janvier",
+  "février",
+  "mars",
+  "avril",
+  "mai",
+  "juin",
+  "juillet",
+  "août",
+  "septembre",
+  "octobre",
+  "novembre",
+  "décembre",
+]
+mois2 = [
+  "janvier",
+  "février",
+  "mars",
+  "avril",
+  "mai",
+  "juin",
+  "juillet",
+  "août",
+  "septembre",
+  "octobre",
+  "novembre",
+  "décembre",
+]
+month = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
+secteur = [
+  "la distribution",
+  "le BTP",
+  "l'agro-industrie",
+  "la logistique",
+  "le négoce de matériaux",
+  "la transformation agroalimentaire",
+  "les services aux entreprises",
+  "l'importation d'équipements",
+]
+
+unite = [
+  "tonnes",
+  "palettes",
+  "cartons",
+  "unités",
+  "sacs",
+  "rouleaux",
+]
+unit = [
+  "tonnes",
+  "pallets",
+  "cartons",
+  "units",
+  "bags",
+]
+ref = [
+  "AJ-1042",
+  "AJ-2317",
+  "AJ-4680",
+  "AJ-7195",
+  "AK-1042",
+  "AK-2317",
+  "AK-4680",
+  "AK-7195",
+  "AL-1042",
+  "AL-2317",
+  "AL-4680",
+  "AL-7195",
+  "AM-1042",
+  "AM-2317",
+  "AM-4680",
+  "AM-7195",
+  "AN-1042",
+  "AN-2317",
+  "AN-4680",
+  "AN-7195",
+  "AP-1042",
+  "AP-2317",
+  "AP-4680",
+  "AP-7195",
+  "BJ-1042",
+  "BJ-2317",
+  "BJ-4680",
+  "BJ-7195",
+  "BK-1042",
+  "BK-2317",
+  "BK-4680",
+  "BK-7195",
+  "BL-1042",
+  "BL-2317",
+  "BL-4680",
+  "BL-7195",
+  "BM-1042",
+  "BM-2317",
+  "BM-4680",
+  "BM-7195",
+  "BN-1042",
+  "BN-2317",
+  "BN-4680",
+  "BN-7195",
+  "BP-1042",
+  "BP-2317",
+  "BP-4680",
+  "BP-7195",
+  "CJ-1042",
+  "CJ-2317",
+  "CJ-4680",
+  "CJ-7195",
+  "CK-1042",
+  "CK-2317",
+  "CK-4680",
+  "CK-7195",
+  "CL-1042",
+  "CL-2317",
+  "CL-4680",
+  "CL-7195",
+  "CM-1042",
+  "CM-2317",
+  "CM-4680",
+  "CM-7195",
+  "CN-1042",
+  "CN-2317",
+  "CN-4680",
+  "CN-7195",
+  "CP-1042",
+  "CP-2317",
+  "CP-4680",
+  "CP-7195",
+  "DJ-1042",
+  "DJ-2317",
+  "DJ-4680",
+  "DJ-7195",
+  "DK-1042",
+  "DK-2317",
+  "DK-4680",
+  "DK-7195",
+  "DL-1042",
+  "DL-2317",
+  "DL-4680",
+  "DL-7195",
+  "DM-1042",
+  "DM-2317",
+  "DM-4680",
+  "DM-7195",
+  "DN-1042",
+  "DN-2317",
+  "DN-4680",
+  "DN-7195",
+  "DP-1042",
+  "DP-2317",
+  "DP-4680",
+  "DP-7195",
+]
+ref2 = [
+  "2024-10",
+  "2024-11",
+  "2024-12",
+  "2024-13",
+  "2024-14",
+  "2024-15",
+  "2024-16",
+  "2024-17",
+  "2024-18",
+  "2024-19",
+  "2024-20",
+  "2024-21",
+  "2024-22",
+  "2024-23",
+  "2024-24",
+  "2024-25",
+  "2024-26",
+  "2024-27",
+  "2024-28",
+  "2024-29",
+  "2024-30",
+  "2024-31",
+  "2024-32",
+  "2024-33",
+  "2024-34",
+  "2024-35",
+  "2024-36",
+  "2024-37",
+  "2024-38",
+  "2024-39",
+  "2024-40",
+  "2024-41",
+  "2025-10",
+  "2025-11",
+  "2025-12",
+  "2025-13",
+  "2025-14",
+  "2025-15",
+  "2025-16",
+  "2025-17",
+  "2025-18",
+  "2025-19",
+  "2025-20",
+  "2025-21",
+  "2025-22",
+  "2025-23",
+  "2025-24",
+  "2025-25",
+  "2025-26",
+  "2025-27",
+  "2025-28",
+  "2025-29",
+  "2025-30",
+  "2025-31",
+  "2025-32",
+  "2025-33",
+  "2025-34",
+  "2025-35",
+  "2025-36",
+  "2025-37",
+  "2025-38",
+  "2025-39",
+  "2025-40",
+  "2025-41",
+  "2026-10",
+  "2026-11",
+  "2026-12",
+  "2026-13",
+  "2026-14",
+  "2026-15",
+  "2026-16",
+  "2026-17",
+  "2026-18",
+  "2026-19",
+  "2026-20",
+  "2026-21",
+  "2026-22",
+  "2026-23",
+  "2026-24",
+  "2026-25",
+  "2026-26",
+  "2026-27",
+  "2026-28",
+  "2026-29",
+  "2026-30",
+  "2026-31",
+  "2026-32",
+  "2026-33",
+  "2026-34",
+  "2026-35",
+  "2026-36",
+  "2026-37",
+  "2026-38",
+  "2026-39",
+  "2026-40",
+  "2026-41",
+]
+[numbers]
+montant   = { min = 750, max = 96000, step = 1000, format = "spaced" }
+montant2  = { min = 120, max = 9800,  step = 1000, format = "spaced" }
+amount    = { min = 12,  max = 940,   step = 1000, format = "grouped" }
+jour      = { min = 1,   max = 29 }
+jour2     = { min = 1,   max = 29 }
+annee     = { min = 2024, max = 2027 }
+pct       = { min = 2,   max = 48 }
+pct2      = { min = 2,   max = 48 }
+delai     = { min = 7,   max = 91 }
+quantite  = { min = 12,  max = 4800 }
+effectif  = { min = 6,   max = 320 }
+
+[[genres]]
+id = "contrat_fr"
+language = "fr"
+blocks = [
+  [
+    """CONTRAT DE FOURNITURE N° {ref}
+
+Entre les soussignés : {societe}, société de droit ivoirien au capital de {montant2} FCFA, dont le siège social est situé à {ville}, ci-après dénommée « le Fournisseur », d'une part,""",
+    """CONTRAT DE PRESTATION DE SERVICES N° {ref}
+
+Entre : {societe}, dont le siège est établi à {ville}, représentée par {personne} agissant en qualité de directeur général, ci-après « le Prestataire », d'une part,""",
+    """MARCHÉ DE FOURNITURES N° {ref}
+
+Le présent marché est conclu entre {societe}, immatriculée au registre du commerce de {ville}, ci-après « le Titulaire », d'une part,""",
+  ],
+  [
+    """et {societe2}, ayant son établissement principal à {ville2}, représentée par {personne2}, ci-après dénommée « le Client », d'autre part.""",
+    """et {societe2}, dont le siège est à {ville2}, dûment représentée aux présentes par {personne2}, ci-après « l'Acheteur », d'autre part.""",
+    """et {societe2}, établie à {ville2}, ci-après désignée « le Bénéficiaire », d'autre part. Les parties ont convenu ce qui suit.""",
+  ],
+  [
+    """
+Article 1 — Objet
+Le présent contrat a pour objet la fourniture de {quantite} {unite} de {produit}, selon les spécifications techniques annexées, qui font partie intégrante du contrat.""",
+    """
+Article 1 — Objet
+Le Fournisseur s'engage à livrer au Client {quantite} {unite} de {produit}, conformément au cahier des charges joint en annexe 1, dont les parties reconnaissent avoir pris connaissance.""",
+    """
+Article 1 — Objet
+Le contrat porte sur la fourniture et la mise en service de {quantite} {unite} de {produit} sur le site du Client à {ville2}, à l'exclusion de toute autre prestation.""",
+  ],
+  [
+    """
+Article 2 — Prix et modalités de règlement
+Le montant total du marché est fixé à {montant} FCFA hors taxes. Le règlement intervient à {delai} jours fin de mois à compter de la réception de la facture, par virement bancaire sur le compte désigné par le Fournisseur.""",
+    """
+Article 2 — Prix
+Le prix global et forfaitaire s'établit à {montant} FCFA HT. Il est ferme et non révisable pendant toute la durée du contrat. Un acompte de {pct} % est versé à la commande, le solde à la livraison.""",
+    """
+Article 2 — Conditions financières
+Le montant du contrat s'élève à {montant} FCFA hors taxes, payable en trois échéances : {pct} % à la signature, {pct2} % au démarrage, le solde après réception définitive.""",
+  ],
+  [
+    """
+Article 3 — Délais
+La livraison intervient au plus tard le {jour} {mois} {annee}. Tout retard supérieur à {delai} jours ouvre droit, au profit du Client, à une pénalité calculée par semaine entamée et plafonnée en valeur, sans que le Client ait à justifier d'un préjudice.""",
+    """
+Article 3 — Délai d'exécution
+Le Prestataire dispose de {delai} jours calendaires à compter de la notification du présent contrat pour achever les prestations. Ce délai est suspendu en cas de force majeure dûment notifiée dans les quarante-huit heures.""",
+    """
+Article 3 — Livraison
+Les marchandises sont livrées à {ville2}, rendues quai, au plus tard le {jour} {mois} {annee}. Le transfert des risques s'opère à la remise effective au Client ou à son transitaire.""",
+  ],
+  [
+    """
+Article 4 — Garantie
+Le Fournisseur garantit les fournitures contre tout vice de fabrication pendant douze mois à compter de la réception. La garantie couvre le remplacement des pièces défectueuses, à l'exclusion des dommages résultant d'un défaut d'entretien.""",
+    """
+Article 4 — Réception
+La réception est prononcée contradictoirement en présence des deux parties. En cas de réserves, le Fournisseur dispose de {delai} jours pour y remédier. Passé ce délai, le Client peut faire exécuter les reprises aux frais du Fournisseur.""",
+    """
+Article 4 — Conformité
+Le Client dispose de huit jours ouvrés à compter de la livraison pour formuler ses réserves. À défaut, les fournitures sont réputées acceptées sans réserve.""",
+  ],
+  [
+    """
+Article 5 — Résiliation
+En cas de manquement grave de l'une des parties à ses obligations, l'autre partie peut résilier le contrat de plein droit, quinze jours après une mise en demeure restée sans effet.""",
+    """
+Article 5 — Confidentialité
+Chaque partie s'interdit de divulguer les informations dont elle a connaissance à l'occasion de l'exécution du contrat, pendant sa durée et les trois années suivant son terme.""",
+    """
+Article 5 — Sous-traitance
+Le Fournisseur ne peut sous-traiter tout ou partie des prestations sans l'accord écrit préalable du Client. L'agrément d'un sous-traitant ne décharge le Fournisseur d'aucune de ses obligations.""",
+  ],
+  [
+    """
+Article 6 — Litiges
+Tout différend relatif à l'interprétation ou à l'exécution du présent contrat est soumis, à défaut d'accord amiable dans un délai de trente jours, au tribunal de commerce de {ville}.
+
+Fait à {ville}, le {jour2} {mois2} {annee}, en deux exemplaires originaux.""",
+    """
+Article 6 — Droit applicable
+Le présent contrat est régi par les Actes uniformes de l'OHADA et, à titre supplétif, par le droit national du lieu d'exécution.
+
+Fait à {ville}, le {jour2} {mois2} {annee}.""",
+    """
+Article 6 — Élection de domicile
+Les parties élisent domicile aux adresses figurant en tête des présentes. Toute modification doit être notifiée par lettre recommandée.
+
+Fait à {ville}, le {jour2} {mois2} {annee}, en deux exemplaires.""",
+  ],
+]
+
+[[genres]]
+id = "compte_rendu_fr"
+language = "fr"
+blocks = [
+  [
+    """COMPTE RENDU DE RÉUNION
+
+Réunion du comité de direction — {ville}, {jour} {mois} {annee}
+Présents : {personne}, {personne2}, les responsables de {service}.
+Absent excusé : le directeur technique.""",
+    """COMPTE RENDU
+
+Revue de projet {ref} — {ville}, le {jour} {mois} {annee}
+Animateur : {personne}. Participants : sept personnes, dont les représentants de {service}.""",
+    """PROCÈS-VERBAL DE RÉUNION
+
+Objet : point mensuel d'activité — {ville}, {jour} {mois} {annee}
+La séance est ouverte à neuf heures par {personne}.""",
+  ],
+  [
+    """
+1. Approbation du compte rendu précédent
+Le compte rendu de la séance du {jour2} {mois2} est approuvé sans modification.""",
+    """
+1. Suivi des décisions
+Sur les six actions arrêtées lors de la séance précédente, quatre sont soldées, une est en cours et une est reportée faute de disponibilité budgétaire.""",
+    """
+1. Ouverture
+{personne} rappelle l'ordre du jour et précise que les arbitrages attendus portent sur trois points seulement.""",
+  ],
+  [
+    """
+2. Activité commerciale
+Le chiffre d'affaires du mois s'établit à {montant} FCFA, en progression de {pct} % par rapport au même mois de l'exercice précédent. La croissance provient principalement des ventes de {produit}, tandis que les autres lignes stagnent.""",
+    """
+2. Situation commerciale
+Les commandes enregistrées atteignent {montant} FCFA, soit {pct} % de l'objectif annuel. {personne2} signale que deux clients importants de {ville2} ont décalé leurs engagements au trimestre suivant.""",
+    """
+2. Ventes
+Le carnet de commandes représente {quantite} {unite} à livrer d'ici la fin du trimestre. Le taux de service ressort à {pct} %, en retrait par rapport au mois précédent.""",
+  ],
+  [
+    """
+3. Exploitation
+Deux ruptures de stock ont été constatées sur {produit}, chacune de {delai} jours. Le service logistique attribue la première à un retard portuaire et la seconde à une commande passée tardivement.""",
+    """
+3. Production
+Le taux d'utilisation des équipements s'établit à {pct} %. Une immobilisation de {delai} jours a été nécessaire pour la maintenance annuelle, opération planifiée mais dont la durée a dépassé la prévision de deux jours.""",
+    """
+3. Logistique
+Sur {quantite} {unite} expédiées, {pct} % sont arrivées dans le délai contractuel. Les retards concernent essentiellement l'axe {ville} — {ville2}, où les contrôles routiers se sont multipliés.""",
+  ],
+  [
+    """
+4. Trésorerie
+L'encours client atteint {montant2} FCFA, dont une part significative à plus de {delai} jours. {personne} demande qu'une relance systématique soit engagée avant la fin du mois.""",
+    """
+4. Situation financière
+Le délai moyen de règlement clients s'établit à {delai} jours, contre 45 jours l'an dernier. La direction financière propose de conditionner les nouvelles livraisons au règlement des factures échues.""",
+    """
+4. Budget
+Les dépenses engagées représentent {pct} % du budget annuel à mi-exercice. L'écart favorable provient d'un report d'investissement et non d'une économie de fonctionnement.""",
+  ],
+  [
+    """
+5. Ressources humaines
+L'effectif s'établit à {effectif} personnes. Deux recrutements sont en cours pour {service}. La formation sécurité prévue en {mois2} concernera l'ensemble des opérateurs.""",
+    """
+5. Personnel
+{personne2} indique que le plan de formation a été consommé à {pct} %. Le comité valide le principe d'une session complémentaire à {ville2}.""",
+    """
+5. Organisation
+Le rattachement de {service} est modifié à compter du 1er {mois2}. La note d'organisation correspondante sera diffusée dans la semaine.""",
+  ],
+  [
+    """
+6. Décisions
+— Relancer les clients dont les factures dépassent {delai} jours, avant le {jour2} {mois2}.
+— Constituer un stock de sécurité de {quantite} {unite} de {produit}.
+— Reporter l'arbitrage sur l'investissement au prochain comité.
+
+La séance est levée à onze heures trente.""",
+    """
+6. Actions arrêtées
+— {personne} présentera un chiffrage détaillé du projet {ref} avant le {jour2} {mois2}.
+— {service} révisera les conditions générales de vente.
+— Une réponse écrite sera adressée au fournisseur de {ville2}.
+
+Prochaine réunion le {jour2} {mois2}.""",
+    """
+6. Conclusions
+Le comité valide le principe d'un plan d'action en trois volets et charge {personne2} d'en assurer le suivi. Un point d'étape est fixé dans quinze jours.
+
+La séance est levée.""",
+  ],
+]
+
+[[genres]]
+id = "note_service_fr"
+language = "fr"
+blocks = [
+  [
+    """NOTE DE SERVICE N° {ref2}
+
+De : {service}
+À : l'ensemble du personnel
+Objet : procédure de demande de congés
+{ville}, le {jour} {mois} {annee}""",
+    """NOTE DE SERVICE N° {ref2}
+
+Émetteur : la direction générale
+Destinataires : chefs de service et responsables d'équipe
+Objet : nouvelles modalités de validation des dépenses
+{ville}, le {jour} {mois} {annee}""",
+    """NOTE INTERNE N° {ref2}
+
+De : {service}
+À : tous les sites
+Objet : consignes de sécurité applicables aux zones de stockage
+{ville}, le {jour} {mois} {annee}""",
+  ],
+  [
+    """
+À compter du 1er {mois2} {annee}, toute demande doit être déposée au moyen du formulaire prévu à cet effet, au moins {delai} jours avant la date souhaitée. Les demandes transmises par un autre canal ne seront plus traitées.""",
+    """
+La présente note annule et remplace toutes les dispositions antérieures portant sur le même objet. Elle prend effet le 1er {mois2} {annee} et s'applique à l'ensemble des établissements.""",
+    """
+Les dispositions ci-après entrent en vigueur le {jour2} {mois2} {annee}. Elles concernent l'ensemble des collaborateurs, quel que soit leur statut, y compris les intérimaires et les prestataires présents sur site.""",
+  ],
+  [
+    """
+L'accord du supérieur direct intervient sous cinq jours ouvrés. En l'absence de réponse à l'expiration de ce délai, l'autorisation est acquise, sauf impératif d'exploitation notifié par écrit à l'intéressé.""",
+    """
+Toute dépense supérieure à {montant2} FCFA requiert désormais une validation préalable de {service}. En dessous de ce seuil, l'engagement reste de la responsabilité du chef de service, dans la limite de son budget.""",
+    """
+Le port des équipements de protection individuelle est obligatoire dans l'ensemble des zones signalées. Les manquements constatés feront l'objet d'un rappel écrit, puis des sanctions prévues au règlement intérieur.""",
+  ],
+  [
+    """
+Une exception est prévue pour les situations d'urgence familiale, appréciées au cas par cas par {service}. Dans cette hypothèse, la demande peut être régularisée après coup, dans un délai de {delai} jours.""",
+    """
+Les cas particuliers non prévus par la présente note sont soumis à l'arbitrage de {personne}, dont la décision est notifiée par écrit à l'intéressé et à son responsable.""",
+    """
+Un registre des dérogations est tenu par {service} et présenté trimestriellement à la direction. Aucune dérogation verbale ne sera opposable.""",
+  ],
+  [
+    """
+Les chefs de service sont chargés de porter la présente note à la connaissance de leurs équipes et d'en assurer l'affichage sur les panneaux prévus à cet effet.
+
+{personne}
+Directeur""",
+    """
+Cette note sera affichée sur les tableaux d'information et diffusée par voie électronique. Un exemplaire est remis à chaque nouvel entrant lors de son accueil.
+
+{personne}
+{service}""",
+    """
+Pour toute question relative à l'application de ces dispositions, les collaborateurs sont invités à s'adresser à leur responsable direct ou à {service}.
+
+{personne}""",
+  ],
+]
+
+[[genres]]
+id = "courriel_fr"
+language = "fr"
+blocks = [
+  [
+    """Objet : relance — facture {ref} échue
+
+Madame, Monsieur,""",
+    """Objet : commande {ref} — confirmation et délai
+
+Bonjour {personne2},""",
+    """Objet : réclamation sur la livraison du {jour} {mois}
+
+Madame, Monsieur,""",
+    """Objet : demande de cotation — {produit}
+
+Bonjour,""",
+  ],
+  [
+    """
+Nous revenons vers vous au sujet de la facture n° {ref}, d'un montant de {montant2} FCFA, échue depuis {delai} jours. Sauf erreur de notre part, son règlement ne nous est pas parvenu à ce jour.""",
+    """
+Nous accusons réception de votre commande n° {ref} portant sur {quantite} {unite} de {produit}, pour un montant total de {montant} FCFA hors taxes.""",
+    """
+La livraison reçue le {jour} {mois} présente un écart de {pct} % par rapport au bon de commande n° {ref} : {quantite} {unite} ont été livrées au lieu de la quantité convenue.""",
+    """
+Notre société, implantée à {ville} et active dans {secteur}, souhaite recevoir une cotation pour {quantite} {unite} de {produit}, livrées à {ville2}.""",
+  ],
+  [
+    """
+Nous vous serions reconnaissants de bien vouloir procéder au règlement sous {delai} jours. Si ce paiement a été effectué entre-temps, nous vous remercions de nous en communiquer la référence afin que nous puissions le rapprocher.""",
+    """
+Nous confirmons une expédition depuis notre dépôt de {ville} au plus tard le {jour2} {mois2}. Le transport est assuré par nos soins, les marchandises voyageant aux risques du destinataire à compter de la remise au transporteur.""",
+    """
+Nous vous demandons de bien vouloir procéder au complément dans les meilleurs délais, ou à défaut d'établir un avoir correspondant. Les marchandises manquantes conditionnent la poursuite de notre propre chantier à {ville2}.""",
+    """
+Merci de nous préciser le prix unitaire rendu, le délai de mise à disposition, ainsi que vos conditions de règlement. Une visite de vos installations serait envisageable si votre offre retient notre attention.""",
+  ],
+  [
+    """
+À défaut de régularisation dans le délai indiqué, nous serions contraints de suspendre les livraisons en cours, conformément à nos conditions générales de vente.""",
+    """
+Un accusé de réception vous parviendra dès le départ du camion, accompagné du bon de livraison et du certificat d'analyse.""",
+    """
+Nous restons naturellement ouverts à toute solution amiable et souhaitons que cet incident ne remette pas en cause une relation commerciale qui donne par ailleurs satisfaction.""",
+    """
+Nous vous remercions de bien vouloir nous répondre avant le {jour2} {mois2}, date à laquelle notre comité arrêtera son choix.""",
+  ],
+  [
+    """
+Nous restons à votre disposition pour tout complément.
+
+Cordialement,
+{personne}
+{societe} — {ville}""",
+    """
+Dans l'attente de votre retour, nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées.
+
+{personne}
+{service}, {societe}""",
+    """
+Bien cordialement,
+{personne}
+{societe}, {ville}""",
+  ],
+]
+
+[[genres]]
+id = "rapport_fr"
+language = "fr"
+blocks = [
+  [
+    """RAPPORT D'ACTIVITÉ — {mois} {annee}
+{societe}, {ville}
+
+1. Synthèse""",
+    """NOTE DE SYNTHÈSE TRIMESTRIELLE
+{societe} — site de {ville}
+
+1. Vue d'ensemble""",
+    """RAPPORT MENSUEL D'EXPLOITATION
+{service} — {ville}, {mois} {annee}
+
+1. Faits marquants""",
+  ],
+  [
+    """
+L'activité du mois ressort à {montant} FCFA, soit {pct} % de l'objectif. La tendance reste orientée à la hausse, portée par {secteur}, mais elle masque des situations contrastées selon les lignes de produits.""",
+    """
+Le trimestre se solde par un chiffre d'affaires de {montant} FCFA, en progression de {pct} % sur un an. Cette progression est intégralement imputable au second mois ; les deux autres sont en léger retrait.""",
+    """
+L'exploitation a été marquée par deux événements : une rupture d'approvisionnement de {delai} jours sur {produit}, et l'ouverture du point de vente de {ville2}, effective depuis le {jour} {mois}.""",
+  ],
+  [
+    """
+2. Ventes
+Les volumes atteignent {quantite} {unite}, contre une prévision inférieure de {pct2} %. Le prix moyen de vente s'érode légèrement sous l'effet de la concurrence sur l'axe {ville} — {ville2}.""",
+    """
+2. Commercial
+Le nombre de clients actifs s'établit à {effectif}. Trois comptes représentent à eux seuls {pct} % du chiffre d'affaires, ce qui constitue une concentration à surveiller.""",
+    """
+2. Marché
+La demande reste soutenue sur {produit}, dont les volumes progressent de {pct} %. Les autres références sont stables. Aucun nouvel entrant significatif n'a été identifié sur la période.""",
+  ],
+  [
+    """
+3. Achats et stocks
+La valeur du stock s'établit à {montant2} FCFA, soit {delai} jours de couverture. Deux références sont en surstock et une en tension permanente depuis le début de l'exercice.""",
+    """
+3. Approvisionnements
+Le délai moyen fournisseur atteint {delai} jours, en dégradation. Le fournisseur historique de {ville2} n'a honoré que {pct} % des commandes dans le délai annoncé.""",
+    """
+3. Logistique
+Le coût de transport à la tonne progresse de {pct} %, sous l'effet du prix du carburant et de l'allongement des rotations.""",
+  ],
+  [
+    """
+4. Points de vigilance
+— La concentration du portefeuille clients.
+— L'encours à plus de {delai} jours, qui atteint {montant2} FCFA.
+— La dépendance à un fournisseur unique sur {produit}.""",
+    """
+4. Risques identifiés
+— Un litige commercial est en cours avec un client de {ville2} ; le montant en jeu est de {montant2} FCFA.
+— Le renouvellement du contrat de maintenance n'est pas engagé.
+— Deux postes clés de {service} restent vacants.""",
+    """
+4. Alertes
+L'écart entre le budget et le réalisé atteint {pct} % sur les charges externes. Cet écart n'est pas expliqué à ce stade et fait l'objet d'une analyse par le contrôle de gestion.""",
+  ],
+  [
+    """
+5. Perspectives
+Le mois de {mois2} devrait bénéficier de la saisonnalité favorable. Sous réserve de la levée des tensions d'approvisionnement, l'objectif annuel reste atteignable.
+
+Rapport établi par {personne}, {service}.""",
+    """
+5. Actions engagées
+Une renégociation des conditions d'achat est ouverte. Le recrutement de deux collaborateurs est lancé. Un plan de réduction du stock dormant sera présenté au prochain comité.
+
+{personne}, {ville}, le {jour2} {mois2} {annee}.""",
+    """
+5. Recommandations
+Il est proposé de conditionner les livraisons des clients en dépassement d'encours, d'ouvrir une seconde source d'approvisionnement et de réviser la tarification avant la fin du trimestre.
+
+{personne}""",
+  ],
+]
+
+[[genres]]
+id = "analyse_fr"
+language = "fr"
+blocks = [
+  [
+    """ANALYSE — écart budgétaire {mois} {annee}
+{service}, {societe}""",
+    """NOTE D'ANALYSE — rentabilité de la ligne {produit}
+{societe}, {ville}""",
+    """ÉTUDE PRÉALABLE — opportunité d'implantation à {ville2}
+{societe}""",
+  ],
+  [
+    """
+Le budget de la période prévoyait {montant} FCFA de charges ; le réalisé s'établit à {montant2} FCFA. L'écart est défavorable et se concentre sur deux postes.""",
+    """
+Le chiffre d'affaires de la ligne atteint {montant} FCFA pour un coût d'achat de {montant2} FCFA. La marge brute qui en découle doit encore supporter les charges de distribution, ce que l'analyse ci-dessous détaille.""",
+    """
+L'implantation envisagée à {ville2} suppose un investissement initial de {montant} FCFA et des charges de structure annuelles estimées à {montant2} FCFA.""",
+  ],
+  [
+    """
+Premier poste : le transport, qui dépasse la prévision de {pct} %. L'analyse des factures montre que l'écart provient pour l'essentiel de trois rotations exceptionnelles vers {ville2}, décidées pour éviter une rupture chez un client important.""",
+    """
+Le coût de revient unitaire s'établit à un niveau supérieur de {pct} % à celui retenu lors de la construction du tarif. L'écart tient à la hausse du prix d'achat, non répercutée en aval.""",
+    """
+Le point mort est atteint pour un volume de {quantite} {unite} par an. Le marché local, estimé à partir des données disponibles, permettrait d'atteindre ce seuil au cours de la deuxième année.""",
+  ],
+  [
+    """
+Second poste : les charges de personnel, en dépassement de {pct2} %. Le recours aux heures supplémentaires a compensé deux absences prolongées et n'a donc pas de caractère structurel.""",
+    """
+Deuxième facteur : la remise commerciale moyenne consentie atteint {pct2} %, contre un objectif inférieur. Cette dérive s'observe principalement sur les commandes traitées en fin de mois.""",
+    """
+Le principal facteur de sensibilité est le taux d'occupation. Une variation de dix points sur cette hypothèse déplace le point mort de près d'un an, ce qui rend la décision dépendante d'une donnée que nous ne maîtrisons pas.""",
+  ],
+  [
+    """
+Lecture d'ensemble : sur l'écart total, une part est conjoncturelle et se résorbera d'elle-même ; le reste appelle une décision. Il serait prématuré d'en conclure à une dérive générale des charges.""",
+    """
+Au total, la ligne reste contributive, mais sa marge s'est réduite. La question posée n'est pas son maintien mais le niveau de prix auquel elle doit être vendue à compter de {mois2}.""",
+    """
+Ces éléments ne permettent pas de trancher à eux seuls. Ils délimitent les conditions dans lesquelles le projet serait rentable, et celles dans lesquelles il ne le serait pas.""",
+  ],
+  [
+    """
+Recommandations
+1. Rétablir la validation préalable des transports exceptionnels.
+2. Ne pas modifier le budget de personnel avant la fin de l'exercice.
+3. Représenter une analyse actualisée au comité de {mois2}.""",
+    """
+Recommandations
+1. Réviser le tarif de {produit} à compter du 1er {mois2}.
+2. Encadrer la remise maximale accordée sans validation.
+3. Suivre mensuellement le coût de revient unitaire.""",
+    """
+Suite proposée
+1. Confirmer l'hypothèse de volume par une étude de terrain à {ville2}.
+2. Chiffrer une variante en location plutôt qu'en acquisition.
+3. Différer la décision au prochain exercice.""",
+  ],
+]
+
+[[genres]]
+id = "devis_fr"
+language = "fr"
+blocks = [
+  [
+    """DEVIS N° {ref}
+{societe} — {ville}
+Établi le {jour} {mois} {annee}, valable trente jours
+
+Client : {societe2}, {ville2}""",
+    """PROPOSITION COMMERCIALE N° {ref}
+{societe}, {ville}
+À l'attention de {personne2}, {societe2}
+Date : {jour} {mois} {annee}""",
+    """OFFRE DE PRIX N° {ref}
+Émetteur : {societe}, {ville}
+Destinataire : {societe2}, {ville2}
+Date d'établissement : {jour} {mois} {annee}""",
+  ],
+  [
+    """
+Désignation : {produit}
+Quantité : {quantite} {unite}
+Prix unitaire hors taxes : voir grille jointe
+Montant total hors taxes : {montant} FCFA""",
+    """
+Objet : fourniture de {quantite} {unite} de {produit}
+Montant hors taxes : {montant} FCFA
+TVA applicable selon la réglementation en vigueur
+Montant toutes taxes comprises : voir récapitulatif""",
+    """
+Prestation proposée : fourniture, transport et déchargement de {quantite} {unite} de {produit} sur le site de {ville2}.
+Montant global et forfaitaire : {montant} FCFA hors taxes.""",
+  ],
+  [
+    """
+Conditions de livraison : rendu {ville2}, déchargement à la charge du client. Délai indicatif : {delai} jours à compter de la commande ferme, sous réserve de disponibilité au moment de la confirmation.""",
+    """
+Délai d'exécution : {delai} jours calendaires après réception de l'acompte. Livraison en une seule fois, sauf accord contraire des parties.""",
+    """
+Modalités : la présente offre s'entend marchandises disponibles en dépôt à {ville}. Un enlèvement par les soins du client donnerait lieu à une remise de {pct} % sur le prix indiqué.""",
+  ],
+  [
+    """
+Conditions de règlement : acompte de {pct} % à la commande, solde à {delai} jours date de facture. Tout retard de paiement entraîne l'application des pénalités prévues par la réglementation.""",
+    """
+Règlement : {pct} % à la commande, {pct2} % à la livraison, solde à trente jours. Aucun escompte n'est consenti pour paiement anticipé.""",
+    """
+Paiement par virement bancaire ou chèque certifié. Les marchandises restent la propriété du vendeur jusqu'au paiement intégral du prix.""",
+  ],
+  [
+    """
+La présente offre est valable trente jours à compter de sa date d'émission. Passé ce délai, les prix sont susceptibles d'être révisés sans préavis.
+
+{personne}
+{service}""",
+    """
+Cette proposition annule et remplace notre offre précédente. Elle est établie sur la base des informations transmises par le client et pourra être ajustée si celles-ci évoluent.
+
+{personne}""",
+    """
+Nous restons à votre disposition pour adapter cette offre à vos contraintes de calendrier ou de conditionnement.
+
+{personne}, {societe}""",
+  ],
+]
+
+[[genres]]
+id = "contract_en"
+language = "en"
+blocks = [
+  [
+    """SUPPLY AGREEMENT No. {ref}
+
+This agreement is made between {societe}, a company having its registered office in {ville} ("the Supplier"), and {societe2}, having its principal place of business in {ville2} ("the Buyer").""",
+    """SERVICE AGREEMENT No. {ref}
+
+Between {societe}, of {ville}, represented by {personne} ("the Provider"), and {societe2}, of {ville2}, represented by {personne2} ("the Client").""",
+    """FRAMEWORK PURCHASE AGREEMENT No. {ref}
+
+Entered into on {jour} {month} {annee} between {societe} ("the Seller") and {societe2} ("the Purchaser").""",
+  ],
+  [
+    """
+1. Scope
+The Supplier shall deliver {quantite} {unit} of {good} in accordance with the technical specification set out in Schedule 1, which forms part of this agreement.""",
+    """
+1. Subject matter
+The Provider shall supply and commission {quantite} {unit} of {good} at the Client's premises in {ville2}. No other service is included unless separately agreed in writing.""",
+    """
+1. Purpose
+This agreement governs the supply of {good} by the Seller to the Purchaser over a period of twelve months, in quantities to be specified in individual purchase orders.""",
+  ],
+  [
+    """
+2. Price and payment
+The total contract value is {amount} FCFA excluding tax. Payment falls due {delai} days from the date of invoice, by bank transfer to the account nominated by the Supplier.""",
+    """
+2. Consideration
+The firm lump-sum price is {amount} FCFA net of tax and is not subject to revision during the term. A deposit of {pct} % is payable on order, the balance on delivery.""",
+    """
+2. Payment terms
+Invoices are payable within {delai} days. Late payment accrues interest at the statutory rate without further notice.""",
+  ],
+  [
+    """
+3. Delivery
+Delivery shall be completed no later than {jour} {month} {annee}. Any delay exceeding {delai} days entitles the Buyer to liquidated damages calculated per week commenced, subject to an overall cap.""",
+    """
+3. Time for performance
+The Provider has {delai} calendar days from notification of this agreement to complete the works. Time is of the essence.""",
+    """
+3. Delivery and risk
+Goods are delivered to {ville2}, carriage paid. Risk passes on physical delivery to the Purchaser or its nominated carrier; title passes only on payment in full.""",
+  ],
+  [
+    """
+4. Acceptance
+The Purchaser has eight working days from delivery to notify defects. Failing such notice, the goods are deemed accepted without reservation.""",
+    """
+4. Warranty
+The Supplier warrants the goods against manufacturing defects for twelve months from delivery. The warranty is limited to replacement of defective parts and excludes damage arising from misuse.""",
+    """
+4. Inspection
+Acceptance is pronounced jointly by both parties. Where reservations are recorded, the Supplier has {delai} days to remedy them at its own cost.""",
+  ],
+  [
+    """
+5. Termination
+Either party may terminate this agreement for material breach, fifteen days after written notice has remained without effect.
+
+Signed at {ville} on {jour2} {month} {annee}, in two originals.""",
+    """
+5. Confidentiality
+Each party shall keep confidential all information received in the course of performance, for the term of this agreement and three years thereafter.
+
+Signed at {ville} on {jour2} {month} {annee}.""",
+    """
+5. Governing law
+This agreement is governed by the OHADA Uniform Acts and, subsidiarily, by the national law of the place of performance. Disputes shall be referred to the commercial court of {ville}.
+
+Signed in duplicate at {ville}.""",
+  ],
+]
+
+[[genres]]
+id = "minutes_en"
+language = "en"
+blocks = [
+  [
+    """MINUTES OF MEETING
+
+Management committee — {ville}, {jour} {month} {annee}
+Present: {personne}, {personne2} and the heads of department.
+Apologies: the technical director.""",
+    """MINUTES
+
+Project review {ref} — {ville}, {jour} {month} {annee}
+Chair: {personne}. Seven participants.""",
+    """RECORD OF MEETING
+
+Monthly operations review — {ville}, {jour} {month} {annee}
+The meeting opened at nine o'clock.""",
+  ],
+  [
+    """
+1. Previous minutes
+The minutes of the meeting held on {jour2} {month} were approved without amendment.""",
+    """
+1. Matters arising
+Of the six actions agreed at the previous meeting, four are closed, one is in progress and one is deferred for lack of budget.""",
+    """
+1. Opening
+{personne} set out the agenda and noted that only three items required a decision.""",
+  ],
+  [
+    """
+2. Commercial performance
+Revenue for the month stands at {amount} FCFA, up {pct} % year on year. Growth came principally from {good}; other lines were flat.""",
+    """
+2. Sales
+Orders booked reached {amount} FCFA, or {pct} % of the annual target. {personne2} reported that two significant customers in {ville2} had deferred their commitments to the following quarter.""",
+    """
+2. Order book
+The order book represents {quantite} {unit} for delivery before quarter end. Service level stands at {pct} %, down on the previous month.""",
+  ],
+  [
+    """
+3. Operations
+Two stock-outs were recorded on {good}, each lasting {delai} days. Logistics attributed the first to a port delay and the second to a late purchase order.""",
+    """
+3. Production
+Equipment utilisation stands at {pct} %. Annual maintenance required {delai} days of downtime — planned, but two days longer than forecast.""",
+    """
+3. Distribution
+Of {quantite} {unit} despatched, {pct} % arrived within the contractual window. Delays were concentrated on the {ville} to {ville2} route.""",
+  ],
+  [
+    """
+4. Cash position
+Trade receivables stand at {amount} FCFA, a significant portion of which is more than {delai} days overdue. {personne} asked for systematic chasing before month end.""",
+    """
+4. Finance
+Average customer payment days stand at {delai}. Finance proposed making further deliveries conditional on settlement of overdue invoices.""",
+    """
+4. Budget
+Committed expenditure represents {pct} % of the annual budget at the half-year. The favourable variance reflects deferred investment rather than a saving in running costs.""",
+  ],
+  [
+    """
+5. Decisions
+— Chase all invoices more than {delai} days overdue before {jour2} {month}.
+— Build a safety stock of {quantite} {unit} of {good}.
+— Defer the investment decision to the next committee.
+
+The meeting closed at half past eleven.""",
+    """
+5. Actions
+— {personne} to present a detailed costing of project {ref} before {jour2} {month}.
+— Terms of sale to be revised.
+— A written reply to be sent to the supplier in {ville2}.
+
+Next meeting: {jour2} {month}.""",
+    """
+5. Conclusions
+The committee approved a three-part action plan and asked {personne2} to monitor it. A progress review was set for two weeks' time.
+
+The meeting closed.""",
+  ],
+]
+
+[[genres]]
+id = "memo_en"
+language = "en"
+blocks = [
+  [
+    """INTERNAL MEMORANDUM No. {ref2}
+
+From: the finance department
+To: all department heads
+Subject: revised expenditure approval limits
+{ville}, {jour} {month} {annee}""",
+    """MEMORANDUM No. {ref2}
+
+From: human resources
+To: all staff
+Subject: leave request procedure
+{ville}, {jour} {month} {annee}""",
+    """NOTICE No. {ref2}
+
+From: the operations director
+To: all sites
+Subject: safety rules in storage areas
+{ville}, {jour} {month} {annee}""",
+  ],
+  [
+    """
+With effect from 1 {month} {annee}, any expenditure above {amount} FCFA requires prior approval. Below that threshold, commitment remains the responsibility of the department head, within the approved budget.""",
+    """
+With effect from {jour2} {month} {annee}, requests must be submitted on the prescribed form at least {delai} days before the date requested. Requests sent by any other route will no longer be processed.""",
+    """
+The following provisions take effect on 1 {month} {annee} and apply to all sites, including contractors and temporary staff working on our premises.""",
+  ],
+  [
+    """
+Line managers have five working days to approve or refuse a request. After that period the request is deemed approved, unless operational necessity is stated in writing.""",
+    """
+This memorandum supersedes all previous instructions on the same subject. Exceptions are decided case by case by {personne} and confirmed in writing.""",
+    """
+Personal protective equipment must be worn in all marked areas. Breaches will be recorded in writing and, if repeated, dealt with under the staff rules.""",
+  ],
+  [
+    """
+Department heads are asked to bring this memorandum to the attention of their teams and to display it on the notice boards provided.
+
+{personne}""",
+    """
+A register of exceptions is kept and reported quarterly to the board. No verbal exception is valid.
+
+{personne}""",
+    """
+Questions on the application of these rules should be addressed to your line manager in the first instance.
+
+{personne}""",
+  ],
+]
+
+[[genres]]
+id = "email_en"
+language = "en"
+blocks = [
+  [
+    """Subject: overdue invoice {ref}
+
+Dear Sir or Madam,""",
+    """Subject: order {ref} — confirmation and lead time
+
+Dear {personne2},""",
+    """Subject: short delivery on {jour} {month}
+
+Dear Sir or Madam,""",
+    """Subject: request for quotation — {good}
+
+Hello,""",
+  ],
+  [
+    """
+We write regarding invoice {ref} for {amount} FCFA, which fell due {delai} days ago. Unless we are mistaken, payment has not reached us.""",
+    """
+We acknowledge your order {ref} for {quantite} {unit} of {good}, totalling {amount} FCFA excluding tax.""",
+    """
+The delivery received on {jour} {month} was short by {pct} % against purchase order {ref}: {quantite} {unit} were delivered instead of the agreed quantity.""",
+    """
+Our company, based in {ville}, would like a quotation for {quantite} {unit} of {good}, delivered to {ville2}.""",
+  ],
+  [
+    """
+We would be grateful if you could arrange settlement within {delai} days. If payment has been made in the meantime, please send us the reference so that we can reconcile it.""",
+    """
+We confirm despatch from our {ville} warehouse no later than {jour2} {month}. Transport is arranged by us; goods travel at the consignee's risk from handover to the carrier.""",
+    """
+Please arrange the balance as soon as possible, or issue a credit note. The missing goods are holding up our own site works in {ville2}.""",
+    """
+Please confirm your unit price delivered, lead time and payment terms. We would welcome a visit to your facilities if your offer is competitive.""",
+  ],
+  [
+    """
+Failing settlement within that period, we would be obliged to suspend current deliveries in accordance with our terms of sale.""",
+    """
+An acknowledgement will follow when the vehicle leaves, together with the delivery note.""",
+    """
+We remain open to an amicable solution and hope this incident will not affect a relationship that is otherwise satisfactory.""",
+    """
+Please reply before {jour2} {month}, when our committee will make its decision.""",
+  ],
+  [
+    """
+We remain at your disposal for any further information.
+
+Kind regards,
+{personne}
+{societe} — {ville}""",
+    """
+Yours faithfully,
+{personne}
+{societe}, {ville}""",
+    """
+Best regards,
+{personne}
+{societe}""",
+  ],
+]
+
+[[genres]]
+id = "report_en"
+language = "en"
+blocks = [
+  [
+    """MONTHLY ACTIVITY REPORT — {month} {annee}
+{societe}, {ville}
+
+1. Summary""",
+    """QUARTERLY REVIEW
+{societe} — {ville} site
+
+1. Overview""",
+    """OPERATIONS REPORT — {ville}, {month} {annee}
+
+1. Highlights""",
+  ],
+  [
+    """
+Activity for the month was {amount} FCFA, or {pct} % of target. The trend remains positive but masks contrasting situations between product lines.""",
+    """
+The quarter closed at {amount} FCFA, up {pct} % year on year. The whole of that increase is attributable to the second month; the other two were slightly down.""",
+    """
+Two events shaped the period: a {delai}-day supply interruption on {good}, and the opening of the {ville2} outlet on {jour} {month}.""",
+  ],
+  [
+    """
+2. Sales
+Volumes reached {quantite} {unit}, {pct2} % above forecast. Average selling price eased slightly under competitive pressure on the {ville} to {ville2} corridor.""",
+    """
+2. Customers
+Active customers number {effectif}. Three accounts represent {pct} % of revenue between them, a concentration that bears watching.""",
+    """
+2. Market
+Demand for {good} remains firm, with volumes up {pct} %. Other references were stable and no significant new entrant was identified.""",
+  ],
+  [
+    """
+3. Stock and purchasing
+Stock value stands at {amount} FCFA, or {delai} days of cover. Two references are overstocked and one has been under continuous tension since the start of the year.""",
+    """
+3. Supply
+Average supplier lead time reached {delai} days and is deteriorating. The long-standing supplier in {ville2} met only {pct} % of its stated delivery dates.""",
+    """
+3. Logistics
+Transport cost per tonne rose {pct} %, driven by fuel prices and longer round trips.""",
+  ],
+  [
+    """
+4. Watch list
+— Customer portfolio concentration.
+— Receivables over {delai} days, now {amount} FCFA.
+— Single-source dependency on {good}.""",
+    """
+4. Risks
+— A commercial dispute with a customer in {ville2}, {amount} FCFA at stake.
+— The maintenance contract renewal has not been started.
+— Two key posts remain vacant.""",
+    """
+4. Alerts
+The variance between budget and actual on external charges reached {pct} %. It is not yet explained and is being analysed.""",
+  ],
+  [
+    """
+5. Outlook
+{month} should benefit from favourable seasonality. Subject to supply tensions easing, the annual target remains reachable.
+
+Prepared by {personne}.""",
+    """
+5. Actions under way
+Purchase terms are being renegotiated, two recruitments have been launched, and a plan to reduce dormant stock will be presented at the next committee.
+
+{personne}, {ville}.""",
+    """
+5. Recommendations
+Make deliveries to customers over their credit limit conditional on payment, open a second source of supply, and review pricing before quarter end.
+
+{personne}""",
+  ],
+]
+
+[[genres]]
+id = "analysis_en"
+language = "en"
+blocks = [
+  [
+    """ANALYSIS — budget variance, {month} {annee}
+{societe}""",
+    """NOTE — profitability of the {good} line
+{societe}, {ville}""",
+    """FEASIBILITY NOTE — opening a depot in {ville2}
+{societe}""",
+  ],
+  [
+    """
+The budget provided for {amount} FCFA of costs; the actual outturn is higher. The variance is unfavourable and concentrated on two headings.""",
+    """
+Revenue on the line is {amount} FCFA against a purchase cost that leaves a gross margin which must still absorb distribution costs.""",
+    """
+The proposed depot requires an initial investment of {amount} FCFA and annual fixed costs that the analysis below sets out.""",
+  ],
+  [
+    """
+First heading: transport, {pct} % above budget. Invoice analysis shows the variance comes largely from three exceptional runs to {ville2}, authorised to avoid a stock-out at a major customer.""",
+    """
+Unit cost is {pct} % higher than the figure used to build the price list, because a purchase price increase was not passed on.""",
+    """
+Break-even is reached at {quantite} {unit} a year. On the demand estimates available, that level would be reached during the second year.""",
+  ],
+  [
+    """
+Second heading: payroll, {pct2} % over budget. Overtime covered two extended absences and is therefore not structural.""",
+    """
+Second factor: average discount granted reached {pct2} %, above target, mostly on orders processed at month end.""",
+    """
+The main sensitivity is the utilisation rate. A ten-point change in that assumption moves break-even by close to a year, which makes the decision dependent on a figure we do not control.""",
+  ],
+  [
+    """
+Read as a whole, part of the variance is cyclical and will correct itself; the remainder requires a decision. It would be premature to read it as a general drift in costs.""",
+    """
+Overall the line still contributes, but its margin has narrowed. The question is not whether to keep it but at what price it should be sold from {month} onwards.""",
+    """
+These figures do not settle the matter on their own. They set out the conditions under which the project would be viable, and those under which it would not.""",
+  ],
+  [
+    """
+Recommendations
+1. Restore prior approval for exceptional transport.
+2. Leave the payroll budget unchanged until year end.
+3. Bring an updated analysis to the {month} committee.""",
+    """
+Recommendations
+1. Revise the price of {good} from 1 {month}.
+2. Cap the discount that may be granted without approval.
+3. Track unit cost monthly.""",
+    """
+Next steps
+1. Confirm the volume assumption with field research in {ville2}.
+2. Cost a leasing variant.
+3. Defer the decision to the next financial year.""",
+  ],
+]
+
+[[genres]]
+id = "reception_fr"
+language = "fr"
+blocks = [
+  [
+    """PROCÈS-VERBAL DE RÉCEPTION N° {ref}
+Chantier : {ville2}
+Maître d'ouvrage : {societe2}
+Entreprise : {societe}
+Date : {jour} {mois} {annee}""",
+    """PROCÈS-VERBAL DE RÉCEPTION DES TRAVAUX
+Opération n° {ref} — {ville2}
+Établi contradictoirement le {jour} {mois} {annee}""",
+    """PV DE LIVRAISON ET DE MISE EN SERVICE N° {ref}
+Site : {ville2}
+Fournisseur : {societe}
+Date d'intervention : {jour} {mois} {annee}""",
+  ],
+  [
+    """
+Les opérations de réception se sont déroulées en présence de {personne}, représentant le maître d'ouvrage, et de {personne2} pour l'entreprise. Les essais prévus au cahier des charges ont été conduits en totalité.""",
+    """
+La vérification a porté sur la conformité aux spécifications, le bon fonctionnement des équipements en charge, et la remise des documents d'exploitation. Chaque point a été contrôlé contradictoirement.""",
+    """
+Ont participé aux opérations : {personne} pour {societe2}, {personne2} pour {societe}, ainsi que le bureau de contrôle. Les mesures relevées figurent en annexe au présent procès-verbal.""",
+  ],
+  [
+    """
+État des lieux : {quantite} {unite} de {produit} ont été livrées et vérifiées. Le comptage contradictoire n'a fait apparaître aucun écart avec le bon de livraison.""",
+    """
+Constatations : sur {quantite} {unite} contrôlées, {pct} % sont conformes sans réserve. Le solde présente des défauts d'aspect sans incidence sur l'usage.""",
+    """
+Les essais de fonctionnement ont été satisfaisants. Le rendement mesuré est conforme à la valeur garantie, avec un écart inférieur à celui admis par le marché.""",
+  ],
+  [
+    """
+Réserves formulées :
+1. Reprise de la signalisation sur la zone de manœuvre.
+2. Remise du dossier des ouvrages exécutés, non fourni à ce jour.
+3. Réglage complémentaire à effectuer avant la fin du mois.
+L'entreprise dispose de {delai} jours pour y remédier.""",
+    """
+Aucune réserve n'est formulée. La réception est prononcée sans réserve à compter de ce jour, et le délai de garantie court à partir de cette date.""",
+    """
+Réserves : le dossier technique reste à compléter et deux points de finition sont à reprendre. Ces réserves ne font pas obstacle à la mise en exploitation immédiate.""",
+  ],
+  [
+    """
+En conséquence, la réception est prononcée avec effet au {jour2} {mois2} {annee}. La retenue de garantie sera libérée après levée des réserves et à l'expiration du délai contractuel.
+
+Signatures des parties.""",
+    """
+La réception est prononcée sous réserve de la levée des points ci-dessus. Une visite de contrôle est fixée au {jour2} {mois2}.
+
+Fait à {ville2}, en trois exemplaires.""",
+    """
+Le présent procès-verbal vaut point de départ des garanties contractuelles. Il est établi en trois exemplaires, dont un remis à l'entreprise.
+
+{personne} — {personne2}""",
+  ],
+]
+
+[[genres]]
+id = "appel_offres_fr"
+language = "fr"
+blocks = [
+  [
+    """AVIS D'APPEL D'OFFRES N° {ref}
+{societe2}, {ville}
+Objet : fourniture de {produit}""",
+    """DOSSIER DE CONSULTATION N° {ref}
+Maître d'ouvrage : {societe2}, {ville}
+Objet : marché de fournitures et services associés""",
+    """CONSULTATION RESTREINTE N° {ref}
+Acheteur : {societe2}
+Lieu d'exécution : {ville2}""",
+  ],
+  [
+    """
+1. Objet de la consultation
+La présente consultation porte sur la fourniture de {quantite} {unite} de {produit}, livrées à {ville2} selon un calendrier échelonné sur douze mois.""",
+    """
+1. Objet
+Le marché a pour objet la fourniture, le transport et la mise en service de {produit} sur le site de {ville2}. Les prestations de maintenance associées font l'objet d'un lot séparé.""",
+    """
+1. Consistance des prestations
+Le titulaire assurera la fourniture de {quantite} {unite} de {produit}, la formation des utilisateurs et l'assistance technique pendant la première année.""",
+  ],
+  [
+    """
+2. Conditions de participation
+Les candidats devront justifier d'une expérience d'au moins trois marchés comparables au cours des cinq dernières années, ainsi que d'une capacité financière suffisante appréciée au vu des trois derniers exercices.""",
+    """
+2. Capacités exigées
+Le candidat produira son attestation de régularité fiscale, son attestation sociale et les références de prestations similaires exécutées dans la sous-région.""",
+    """
+2. Recevabilité
+Les offres émanant de groupements sont admises, sous réserve de désigner un mandataire solidaire. Les candidatures incomplètes seront écartées sans examen au fond.""",
+  ],
+  [
+    """
+3. Critères de jugement
+Les offres seront classées selon la valeur technique pour {pct} %, le prix pour {pct2} % et le délai de livraison pour le solde. Une note éliminatoire est prévue sur la conformité technique.""",
+    """
+3. Jugement des offres
+Le classement retiendra le prix et la valeur technique, appréciée au vu du mémoire remis. Toute offre anormalement basse fera l'objet d'une demande de justification écrite.""",
+    """
+3. Attribution
+Le marché sera attribué à l'offre économiquement la plus avantageuse, appréciée sur l'ensemble des critères pondérés annoncés au règlement de consultation.""",
+  ],
+  [
+    """
+4. Remise des offres
+Les plis devront parvenir au plus tard le {jour} {mois} {annee} à seize heures, à l'adresse indiquée ci-dessus. Les offres remises hors délai seront retournées sans être ouvertes.""",
+    """
+4. Dépôt
+La date limite de remise est fixée au {jour} {mois} {annee}. Les offres resteront valables {delai} jours à compter de cette date.""",
+    """
+4. Calendrier
+Remise des offres : {jour} {mois} {annee}. Ouverture des plis en séance publique le lendemain. Notification prévue dans le mois suivant.""",
+  ],
+  [
+    """
+5. Renseignements
+Toute demande de précision est adressée par écrit à {service}, au plus tard {delai} jours avant la date limite. Les réponses sont communiquées à l'ensemble des candidats.
+
+{personne}""",
+    """
+5. Variantes
+Les variantes sont autorisées à condition qu'une offre de base conforme soit également remise. Aucune négociation n'est prévue après l'ouverture.
+
+{personne}, {societe2}""",
+    """
+5. Dispositions diverses
+L'acheteur se réserve le droit de ne pas donner suite à la consultation, sans que les candidats puissent prétendre à indemnité.
+
+{personne}""",
+  ],
+]
+
+[[genres]]
+id = "rh_fr"
+language = "fr"
+blocks = [
+  [
+    """FICHE DE POSTE
+Intitulé : responsable {service}
+Rattachement : direction générale
+Lieu : {ville}
+Référence : {ref}""",
+    """OFFRE D'EMPLOI
+{societe} recrute pour son site de {ville}
+Poste : chargé de mission, {service}
+Référence : {ref}""",
+    """DESCRIPTIF DE FONCTION
+Entité : {societe}, {ville}
+Fonction : coordinateur d'exploitation
+Référence : {ref}""",
+  ],
+  [
+    """
+Contexte
+{societe} exerce dans {secteur} et emploie {effectif} personnes réparties sur deux sites. Le poste est créé pour accompagner la croissance de l'activité et structurer les procédures internes.""",
+    """
+Environnement
+L'entreprise, présente à {ville} et {ville2}, compte {effectif} collaborateurs. Le titulaire du poste travaillera en lien étroit avec {service} et les responsables de site.""",
+    """
+Présentation
+Avec {effectif} salariés et une implantation à {ville}, la société intervient principalement dans {secteur}. Le poste est rattaché directement à la direction.""",
+  ],
+  [
+    """
+Missions principales
+— Piloter l'activité quotidienne et le suivi des indicateurs.
+— Encadrer une équipe de six personnes.
+— Préparer les budgets et suivre leur exécution.
+— Représenter l'entreprise auprès des partenaires locaux.""",
+    """
+Responsabilités
+— Organiser les approvisionnements et les stocks.
+— Négocier les conditions d'achat avec les fournisseurs.
+— Garantir le respect des procédures de sécurité.
+— Rendre compte mensuellement à la direction.""",
+    """
+Attributions
+— Assurer le suivi des dossiers clients et des règlements.
+— Établir les reportings d'activité.
+— Proposer les actions correctives nécessaires.
+— Participer aux réunions de direction.""",
+  ],
+  [
+    """
+Profil recherché
+Formation supérieure en gestion ou équivalent, assortie d'une expérience d'au moins cinq ans dans une fonction comparable. La maîtrise du français est indispensable, celle de l'anglais appréciée.""",
+    """
+Compétences attendues
+Rigueur, capacité d'analyse et sens de l'organisation. Une expérience du secteur et la pratique des outils de gestion sont exigées. Le permis de conduire est nécessaire.""",
+    """
+Qualités requises
+Autonomie, aptitude à l'encadrement et goût du terrain. Une connaissance de la réglementation applicable dans la sous-région constitue un atout.""",
+  ],
+  [
+    """
+Conditions
+Contrat à durée indéterminée, période d'essai de trois mois renouvelable une fois. Rémunération selon profil et expérience. Prise de fonction souhaitée au 1er {mois2} {annee}.""",
+    """
+Modalités
+Poste basé à {ville}, avec des déplacements réguliers vers {ville2}. Rémunération à négocier. Les candidatures sont reçues jusqu'au {jour} {mois}.""",
+    """
+Dispositions
+Le poste comporte des astreintes ponctuelles. La prise de fonction est prévue le {jour} {mois} {annee}. Les dossiers de candidature sont adressés à {service}.""",
+  ],
+]
+
+[[genres]]
+id = "procedure_en"
+language = "en"
+blocks = [
+  [
+    """PROCEDURE {ref2} — purchase order approval
+Owner: finance
+Issue {annee}.{jour}
+Applies to: all sites""",
+    """STANDARD OPERATING PROCEDURE {ref2} — goods receipt
+Owner: logistics
+Effective {jour} {month} {annee}""",
+    """QUALITY PROCEDURE {ref2} — handling customer complaints
+Owner: {service}
+Revision {annee}.{jour2}""",
+  ],
+  [
+    """
+1. Purpose
+This procedure defines how purchase requests are raised, approved and recorded, so that commitments are visible before they are made rather than after the invoice arrives.""",
+    """
+1. Purpose
+This procedure sets out how incoming goods are checked against the order and the delivery note, and how discrepancies are recorded.""",
+    """
+1. Purpose
+This procedure describes how customer complaints are received, investigated and closed, and the records to be kept at each stage.""",
+  ],
+  [
+    """
+2. Scope
+It applies to all expenditure above {amount} FCFA, at every site, including purchases made by contractors on the company's behalf. Emergency purchases are covered by section 6.""",
+    """
+2. Scope
+It applies to every delivery received at the {ville} and {ville2} warehouses, whatever the value, and to direct deliveries to customer sites.""",
+    """
+2. Scope
+It covers complaints received by any channel — letter, e-mail, telephone or in person — and applies to all staff who deal with customers.""",
+  ],
+  [
+    """
+3. Responsibilities
+The requester completes the form and states the budget line. The department head checks the budget. Finance verifies the supplier is approved. No order leaves the company without both signatures.""",
+    """
+3. Responsibilities
+The storekeeper performs the physical count. The logistics supervisor authorises acceptance. Any discrepancy above {pct} % is escalated to {service} the same day.""",
+    """
+3. Responsibilities
+The person receiving the complaint records it within one working day. {service} investigates and proposes a response. The department head approves any commercial gesture.""",
+  ],
+  [
+    """
+4. Steps
+4.1 Raise the request, stating quantity, specification and required date.
+4.2 Obtain budget approval.
+4.3 Obtain at least two quotations above {amount} FCFA.
+4.4 Issue the order and file the acknowledgement.
+4.5 Match invoice, order and delivery note before payment.""",
+    """
+4. Steps
+4.1 Check the vehicle seal and the delivery note against the order.
+4.2 Count and inspect the goods.
+4.3 Record quantities received and any damage.
+4.4 Sign the note, keeping one copy.
+4.5 Enter the receipt in the stock record the same day.""",
+    """
+4. Steps
+4.1 Record the complaint with date, customer and order reference.
+4.2 Acknowledge receipt within {delai} days.
+4.3 Investigate and establish the facts.
+4.4 Reply in writing.
+4.5 Close the file, recording the root cause.""",
+  ],
+  [
+    """
+5. Records
+Approved requests, quotations and orders are kept for five years. The register is reviewed quarterly by {service}, and exceptions are reported to the board.
+
+Approved: {personne}""",
+    """
+5. Records
+Signed delivery notes and discrepancy reports are filed for five years. A monthly summary of discrepancies is produced for {service}.
+
+Approved: {personne}""",
+    """
+5. Records and review
+The complaints register is reviewed monthly. Recurring causes are reported to management with a proposed corrective action.
+
+Approved: {personne}""",
+  ],
+]
+
+[[genres]]
+id = "policy_en"
+language = "en"
+blocks = [
+  [
+    """INFORMATION SECURITY POLICY {ref2}
+{societe} — {ville}
+Approved by the board on {jour} {month} {annee}""",
+    """DATA PROTECTION POLICY {ref2}
+{societe}
+Effective {jour} {month} {annee}""",
+    """TRAVEL AND EXPENSES POLICY {ref2}
+{societe}, {ville}
+Issued {jour} {month} {annee}""",
+  ],
+  [
+    """
+1. Principles
+Company information is an asset. It is classified as public, internal or confidential, and handled accordingly. Where a classification is unclear, the more restrictive treatment applies.""",
+    """
+1. Principles
+Personal data is collected only for a stated purpose, kept only as long as that purpose requires, and disclosed only to those who need it to do their work.""",
+    """
+1. Principles
+Expenditure on travel must be necessary, reasonable and supported by receipts. Where a cheaper option was available and not taken, the reason is recorded.""",
+  ],
+  [
+    """
+2. Access
+Access rights follow the role, not the person, and are reviewed when someone changes duties or leaves. Shared accounts are not permitted. Passwords are not written down or exchanged by e-mail.""",
+    """
+2. Lawful basis
+Personal data is processed on the basis of contract, legal obligation or consent. Consent, where relied on, is recorded and can be withdrawn.""",
+    """
+2. Authorisation
+All travel is authorised in advance by the department head. Journeys between {ville} and {ville2} follow the standard schedule of allowances.""",
+  ],
+  [
+    """
+3. Devices and premises
+Laptops leaving the premises are encrypted. Documents classified as confidential are not left on desks overnight or printed on shared devices without collection.""",
+    """
+3. Retention
+Records are retained for the periods set out in the retention schedule and then destroyed securely. Deletion requests are handled within {delai} days.""",
+    """
+3. Limits
+Accommodation is reimbursed up to the ceiling set annually. Expenditure above {amount} FCFA requires prior written approval, whatever the category.""",
+  ],
+  [
+    """
+4. Incidents
+Any suspected loss or disclosure is reported to {service} immediately, and in any event within twenty-four hours. Reports made in good faith carry no sanction, whatever the outcome.""",
+    """
+4. Breaches
+A breach is reported to {service} without delay and, where required, to the supervisory authority. A register of breaches is maintained.""",
+    """
+4. Claims
+Claims are submitted within {delai} days of return, with receipts. Late claims may be refused. Claims without receipts are settled only in exceptional circumstances, on written justification.""",
+  ],
+  [
+    """
+5. Compliance
+This policy applies to employees, contractors and temporary staff. It is reviewed annually and after any significant incident.
+
+{personne}, on behalf of the board""",
+    """
+5. Responsibility
+Every member of staff is responsible for applying this policy. {service} monitors compliance and reports annually to the board.
+
+{personne}""",
+    """
+5. Review
+This policy is reviewed each year. Questions on its application are addressed to {service}.
+
+{personne}""",
+  ],
+]
