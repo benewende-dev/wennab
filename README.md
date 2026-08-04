@@ -113,6 +113,10 @@ exams  : 17 text(s)
   a corpus containing its own exam marks its own paper.
 ```
 
+That run is the real one, taken before the offending template was rewritten — which is why the
+corpus this repository ships no longer reproduces it. Regenerate the corpus today and the same
+command answers with a longest shared run of two words.
+
 Exit code 1 on a collision, so it drops straight into a pipeline. Eight consecutive words do not
 coincide between independent texts even in the same register — and the longest shared run is
 printed either way, because a clean pass at n=8 does not tell you whether you cleared it by a mile
