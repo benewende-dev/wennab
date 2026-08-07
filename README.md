@@ -11,6 +11,15 @@ optimisation results quietly turn into fiction.
 pip install git+https://github.com/benewende-dev/wennab
 ```
 
+![Building the calibration corpus, checking it against the seventeen exam texts,
+pasting one exam back in to watch the check refuse it with exit code 1, then the
+paired comparison returning p = 0.625](docs/images/demo.gif)
+
+*Twenty-two seconds, three commands, all of them runnable from a clone. The GIF
+is built by `scripts/faire-le-gif.py`, which **runs the commands** and screenshots
+their real output — it fails rather than draws if the corpus ever stops passing,
+or if a corpus holding its own exam ever stops failing.*
+
 ---
 
 ## The problem, stated plainly
