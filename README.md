@@ -20,6 +20,16 @@ is built by `scripts/faire-le-gif.py`, which **runs the commands** and screensho
 their real output — it fails rather than draws if the corpus ever stops passing,
 or if a corpus holding its own exam ever stops failing.*
 
+| command | the question it answers | exit |
+|---|---|---|
+| [`wennab twin`](#wennab-twin--is-this-even-a-valid-pair) | do these two GGUF files differ by anything but their values? | `0` |
+| [`wennab corpus`](#wennab-corpus--a-calibration-corpus-you-can-reproduce-and-read) | what do I calibrate on, when the real documents are unpublishable? | `0` |
+| [`wennab guard`](#wennab-guard--refuse-a-corpus-that-contains-its-own-exam) | does my calibration corpus contain the exam it will be graded on? | `1` on collision |
+| [`wennab paired`](#wennab-paired--compare-question-by-question) | is the gap between two scores distinguishable from chance? | `0` |
+
+Built and measured on an **Apple M1, 8 GB, CPU only**. One dependency, and only
+one of the four needs it.
+
 ---
 
 ## The problem, stated plainly
@@ -95,6 +105,14 @@ is attributable to whatever produced those values.
 
 That second run is the one that makes everything downstream mean something.
 
+**Method.** The type map is read from the GGUF's tensor headers, so a 1.16 GB file
+is inspected without reading a single tensor's data. Differing tensors are grouped by
+the pattern they follow rather than listed: a column of 72 tensor names tells you
+nothing, while *`attn_qkv`, 18 layers, −35 MB* tells you what the publisher decided.
+`--emit` with a `--baseline` writes only the overrides where the two maps disagree —
+the minimal set that turns one into the other, instead of the several hundred lines
+you get from pinning every quantised tensor.
+
 Both blocks are the command's own output against the two 1.16 GB files of the case study —
 the published build and our rebuild — with nothing removed and the paths shortened. They are
 the one thing here you cannot rerun from a clone: a repository has no business shipping a
@@ -118,6 +136,15 @@ Diversity is printed, not assumed, because it is the ceiling on what this method
 estimated on repetition over-weights whatever repeats. Measured on ours — 330 kB → 0.387,
 240 kB → 0.439, 180 kB → 0.495 — so we shipped the shortest of the three, which still gives 88
 chunks against the 80 of the calibration we were replacing.
+
+**Method.** A registry is a TOML file of entities and hand-written sentence blocks;
+the generator draws from them under a fixed seed, so the same registry and the same
+`--seed` reproduce the corpus byte for byte on any machine. Each document's cast —
+city, company, dates, amounts — is drawn once and reused across all its blocks, so a
+memo does not change town between its header and its signature. Diversity is the
+share of distinct 4-grams, printed with every run because it is the ceiling on what
+a generated corpus can do, and a ceiling you assume is a ceiling you will exceed on
+paper.
 
 `registries/enterprise-fr.toml` ships as a worked example: 18 genres of francophone West African
 business document — supply contracts, minutes, service memos, quotations, tenders, acceptance
@@ -180,6 +207,17 @@ exams  : 0 text(s)
 A wrong path, or a results dump handed over instead of the prompts, produces zero collisions — and
 a tool that answered "clean" there would be lying in exactly the way this one exists to prevent.
 
+**Method.** Words are lowercased and stripped of punctuation, then compared as
+sets of n-grams; eight consecutive words do not coincide between independent texts, even
+inside one register. The *longest* shared run is found by searching upward from
+n=1 and stopping at the first miss — one set intersection per length, rather than
+the quadratic table a 30,000-word corpus would otherwise demand. The search stops
+at 40 words and says so: a corpus that swallowed a whole 74-word exam must report
+"at least 40", never a flat "40" with the composure of a measurement. Exam files
+can be `.txt`, `.json` or `.jsonl` — JSON is walked to any depth and every string
+of eight words or more is compared, so `--against prompts.json` works on a harness
+dump without a conversion step.
+
 ## `wennab paired` — compare question by question
 
 Reads the `samples_*.jsonl` that `lm_eval --log_samples` already writes, pairs by document id, and
@@ -205,6 +243,16 @@ $ wennab paired runs/reference runs/candidate
 Paired by document id rather than by position: two runs can order their documents differently, and
 pairing by position then compares unrelated questions while looking perfectly healthy.
 
+**Method.** Both models answered the same questions and fail on mostly the same
+ones, so all the information sits in the questions where they disagree. Under the
+hypothesis that the change did nothing, each disagreement is a coin flip, and the
+p-value is the **exact** two-sided binomial probability of a split at least this
+lopsided — `math.comb`, no chi-square approximation and no continuity correction.
+That is deliberate: with four discordant pairs the approximation is at its worst,
+and four discordant pairs is the regime an optimisation comparison is always in.
+Runs that share no question id, or that do not cover the same set, are refused
+with exit code 2 rather than silently compared on the intersection.
+
 ---
 
 ## The case study: it told us our own work was worthless
@@ -226,6 +274,34 @@ the reasoning behind each control: [`case-study/`](case-study/).
 
 An honest null result took a day to establish and would have taken ten minutes to fake. That gap
 is the whole reason this repository exists.
+
+---
+
+## Four faults this repository found in itself
+
+A tool that refuses unverifiable results has to survive being pointed at its own
+work. Each of these was found by doing that, and each is now held by a test that
+was checked to fail on the old code.
+
+- **`guard` returned "clean" after reading zero exam text.** A wrong path, or a
+  results dump handed over instead of the prompts, yields zero collisions — and
+  answering "no collision" there is exactly the lie the tool exists to prevent.
+  Zero exams is now a failure with a message saying why.
+- **`python -m wennab.cli twin a.gguf b.gguf`, the line the README gave for
+  running from a clone, did nothing and exited 0.** The `__main__` guard was
+  missing. A silent success, in the repository whose subject is silent successes;
+  nobody audits a zero. The test runs it as a subprocess on purpose — calling
+  `main()` from Python would have passed all along, because the function was never
+  what was broken.
+- **Three published diversity figures came from the wrong generator.** 0.380 /
+  0.432 / 0.489 were inherited from the prototype this code was converted from.
+  Recomputed here: **0.387 / 0.439 / 0.495**, with the seed to reproduce them and a
+  test that fails if they ever drift again.
+- **Three console blocks in this README had been tidied by hand** — truncated
+  lines, two swapped rows, a column realigned. No figure was wrong. But a
+  repository arguing *do not publish a recomposed number* cannot recompose its own
+  screenshots. They were replayed and pasted whole, and the GIF above is now
+  generated by running the commands rather than drawing them.
 
 ---
 
@@ -282,6 +358,58 @@ text and JSON, deliberately, so they run on anything.
 
 Tested on `aarch64` (Apple M1, macOS) and portable to any Arm64 Linux: nothing here compiles, and
 nothing here calls a GPU.
+
+## In a pipeline
+
+Contamination is not a thing you check once. The corpus grows, someone adds a
+template, a new evaluation task lands — and the collision appears months after the
+person who could recognise it has moved on. `guard` exits **1** on any shared
+8-gram and prints the offending run, so it gates:
+
+```yaml
+# .github/workflows/calibration.yml
+steps:
+  - uses: actions/checkout@v4
+  - run: pip install git+https://github.com/benewende-dev/wennab
+  - run: wennab corpus registries/enterprise-fr.toml --bytes=180000 > corpus.txt
+  - run: wennab guard corpus.txt --against case-study/exams/*.txt
+```
+
+Exit codes are stable and mean one thing each: **0** the check ran and passed,
+**1** the check ran and failed, **2** the check could not run — a missing path, no
+exam text read, two runs that do not cover the same questions. The distinction
+matters more than it looks: a tool that returned 0 when it could not run would let
+a broken step through as a green tick, which is the same failure, one level up,
+that this repository exists to catch.
+
+`twin` reports and returns 0 even when the files are not a valid pair — it is a
+diagnostic you read before deciding, not a gate. That is a deliberate limit, and it
+is on the list below.
+
+## What this does not do
+
+Naming the ceiling is part of the method. Nothing here is a wrapper that will
+someday grow into a platform.
+
+- **It does not quantise and it does not evaluate.** `llama-quantize` and
+  `lm-evaluation-harness` do that. These four tools only make their results
+  attributable.
+- **`corpus` does not produce authentic text.** Its syntax is its templates'
+  syntax, and a matrix calibrated on it protects the weights those templates
+  activate. That is why diversity is printed rather than assumed — the number is
+  the honest statement of the ceiling, not a score.
+- **`guard` finds shared wording, not shared meaning.** A paraphrase of an exam
+  question shares no 8-gram and will pass. n=8 is a floor on contamination, not a
+  proof of independence.
+- **`paired` needs both runs to have seen the same questions.** It refuses rather
+  than pairs on the intersection, which is correct and also means two runs made
+  with different `--limit` values are simply not comparable here.
+- **`twin` compares type maps, not values.** Identical maps and zero bytes apart
+  do not mean the two files are close; they mean the difference between them is
+  the one you introduced, which is the whole point.
+- **`twin` does not gate.** It exits 0 whatever it finds. Making an invalid pair
+  fail a build is a behaviour change, not a documentation change, so it is not
+  claimed here until it is done and tested.
 
 ## Licence
 
