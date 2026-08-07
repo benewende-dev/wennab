@@ -123,6 +123,27 @@ def test_aucune_epreuve_lue_nest_pas_un_succes(tmp_path):
     assert "not a pass" in guard.report(r)
 
 
+def test_le_filtre_de_longueur_suit_le_n_demande(tmp_path):
+    """Le faux « clean » le plus grave trouvé dans ce dépôt.
+
+    `load_exams` écartait les chaînes JSON de moins de **huit** mots quel que
+    soit le n demandé. Avec `--n=5`, une épreuve de six mots posée entière dans
+    le corpus n'était donc pas lue du tout : une épreuve sur deux, zéro
+    collision, une coche, code 0. Et le garde-fou « zéro épreuve n'est pas un
+    succès » ne rattrapait rien, puisqu'une autre épreuve, elle, avait été lue.
+    """
+    courte = "le chef de service dispose"                       # 5 mots
+    longue = " ".join(f"mot{i}" for i in range(30))             # 30 mots, absente
+    (tmp_path / "exams.json").write_text(
+        json.dumps({"a": longue, "b": courte}), encoding="utf-8")
+
+    epreuves = guard.load_exams([tmp_path / "exams.json"], n=5)
+    assert len(epreuves) == 2, "l'épreuve de cinq mots doit être lue quand n=5"
+
+    r = guard.check("bla bla " + courte + " bla bla", epreuves, n=5)
+    assert not r["clean"], "une épreuve entièrement présente ne peut pas passer"
+
+
 def test_plus_longue_sequence_rapportee(tmp_path):
     epreuve = tmp_path / "e.txt"
     epreuve.write_text("alpha bravo charlie delta echo foxtrot")
@@ -203,6 +224,20 @@ def test_appariement_par_doc_id_pas_par_position(tmp_path):
     assert r["discordant"] == 0
 
 
+def test_sans_doc_id_le_fichier_est_refuse(tmp_path):
+    """Sans identifiant, `outcomes` numérotait par ordre d'arrivée.
+
+    C'est-à-dire l'appariement par position, que la docstring de la fonction
+    déconseille deux lignes au-dessus de la ligne qui le faisait. Silencieux :
+    deux exécutions ordonnées différemment se comparaient question contre
+    question sans rapport, et le rapport paraissait sain.
+    """
+    (tmp_path / "samples_x.jsonl").write_text(
+        "\n".join(json.dumps({"acc_norm": v}) for v in (1, 0, 1)), encoding="utf-8")
+    with pytest.raises(paired.MismatchedRuns, match="doc_id"):
+        paired.outcomes(tmp_path / "samples_x.jsonl")
+
+
 def test_dossier_accepte_a_la_place_du_fichier(tmp_path):
     dossier = tmp_path / "run"
     dossier.mkdir()
@@ -212,11 +247,42 @@ def test_dossier_accepte_a_la_place_du_fichier(tmp_path):
 
 # —————————————————————————————————— cli ———————————————————————————————————
 
-@pytest.mark.parametrize("commande", ["twin", "guard", "paired"])
+@pytest.mark.parametrize("commande", ["corpus", "twin", "guard", "paired"])
 def test_sans_argument_affiche_l_usage(commande, capsys):
-    """No command may answer a missing argument with a traceback."""
+    """No command may answer a missing argument with a traceback.
+
+    `corpus` manquait à cette liste, et c'est pour ça qu'il rendait 1 — le code
+    d'un contrôle qui a échoué — en imprimant la première ligne de sa docstring
+    au lieu d'un usage.
+    """
     assert cli.main([commande]) == 2
     assert "usage:" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("argv", [
+    ["corpus", "absent.toml"],
+    ["corpus", "registries/enterprise-fr.toml", "--bytes=abc"],
+    ["guard", "absent.txt", "--against", "README.md"],
+    ["guard", "README.md", "--against", "absent.txt"],
+    ["guard", "--against", "README.md"],
+    ["guard", "README.md", "--against", "README.md", "--n=abc"],
+    ["paired", "absent-a", "absent-b"],
+    ["paired", "README.md", "README.md"],
+])
+def test_ce_qui_na_pas_pu_tourner_sort_2(argv, capsys):
+    """2 et 1 ne veulent pas dire la même chose, et c'est tout l'enjeu.
+
+    Ces huit chemins remontaient la pile de Python, donc **code 1** : celui
+    d'un contrôle qui a tourné et a échoué. Dans un journal de CI, un chemin
+    mal tapé devenait indiscernable d'une vraie contamination — la panne
+    prenait l'apparence exacte du résultat.
+    """
+    chemins = [str(RACINE / a) if a.endswith((".toml", ".md", ".txt")) and "absent" not in a
+               else a for a in argv]
+    assert cli.main(chemins) == 2, f"{argv} devrait rendre 2"
+    err = capsys.readouterr().err
+    assert err.strip(), f"{argv} sort 2 sans rien dire"
+    assert "Traceback" not in err
 
 
 def test_commande_inconnue(capsys):
@@ -302,7 +368,7 @@ def test_cas_reel_du_depot():
 
 # —————————————————————————————————— twin ——————————————————————————————————
 
-def _gguf(chemin: pathlib.Path, dtype) -> pathlib.Path:
+def _gguf(chemin: pathlib.Path, dtype, couches=(0, 1)) -> pathlib.Path:
     """Le plus petit GGUF valide qui porte une carte de types lisible.
 
     Deux tenseurs de 4×4, écrits par `gguf` lui-même : ce que `twin` regarde
@@ -312,7 +378,7 @@ def _gguf(chemin: pathlib.Path, dtype) -> pathlib.Path:
     from gguf import GGUFWriter
 
     w = GGUFWriter(str(chemin), "test")
-    for couche in (0, 1):
+    for couche in couches:
         w.add_tensor(f"blk.{couche}.attn_qkv.weight", np.zeros((4, 4), dtype=dtype))
     w.write_header_to_file()
     w.write_kv_data_to_file()
@@ -357,6 +423,24 @@ def test_fichier_absent_sort_2_sans_trace_d_appels(tmp_path, capsys):
     a = _gguf(tmp_path / "reference.gguf", np.float32)
     assert cli.main(["twin", str(a), str(tmp_path / "absent.gguf")]) == 2
     assert "cannot read" in capsys.readouterr().err
+
+
+def test_tenseur_en_trop_nest_pas_une_carte_identique(tmp_path, capsys):
+    """« identical type maps » au-dessus de « difference +64 B ».
+
+    `differences()` ne parcourait que les tenseurs de la référence : ceux que
+    le candidat avait en plus n'existaient pas. Deux fichiers d'architectures
+    différentes ressortaient donc « differ only in values », code 0 — le titre
+    démentant le chiffre imprimé deux lignes plus bas.
+    """
+    import numpy as np
+
+    a = _gguf(tmp_path / "reference.gguf", np.float32, couches=(0,))
+    b = _gguf(tmp_path / "candidate.gguf", np.float32, couches=(0, 1))
+    assert cli.main(["twin", str(a), str(b)]) == 1
+    sortie = capsys.readouterr().out
+    assert "identical type maps" not in sortie
+    assert "absent" in sortie
 
 
 def test_emit_n_exige_pas_que_sa_cible_existe(tmp_path):

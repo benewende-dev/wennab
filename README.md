@@ -278,17 +278,39 @@ is the whole reason this repository exists.
 
 ---
 
-## Five faults this repository found in itself
+## Nine faults this repository found in itself
 
 A tool that refuses unverifiable results has to survive being pointed at its own
 work. Each of these was found by doing that, and each is now held by a test that
-was checked to fail on the old code.
+was checked to fail on the old code. They are listed because the count is the
+point: none raised an exception, none looked like a defect, and every one of them
+returned an answer a reader would have believed.
 
+- **`guard` skipped exam strings shorter than eight words even when asked to check
+  at five.** The worst of the nine, because it is a false pass in the tool whose
+  only job is to refuse one. A JSON exam file holding a thirty-word question and a
+  six-word question, the six-word one sitting whole inside the corpus, `--n=5`: one
+  exam of two read, zero collisions, a tick, exit 0. The length filter now follows
+  `--n`.
 - **`twin` printed "these files are NOT a valid pair" and exited 0.** The one
   command that can see a comparison already spoiled could not stop it: the sentence
   went into a log nobody rereads, and the measurement went ahead. It exits 1 now,
-  like a failed `guard`, and a missing path exits 2 instead of raising through the
-  GGUF reader.
+  like a failed `guard`.
+- **`twin` called two files "identical type maps" when one held tensors the other
+  did not.** It walked the reference's tensors, so anything extra in the candidate
+  did not exist. Two files of different architectures came back *differ only in
+  values*, exit 0, with `difference +64 B` printed two lines below the claim. It
+  walks the union now, and reports the absent side as `absent`.
+- **Nine error paths exited 1 with a Python traceback.** A mistyped corpus path, a
+  results dump where prompts were expected, `--bytes=abc` — all of them raised
+  through to the interpreter, which exits **1**: the code that means *the check ran
+  and failed*. In a CI log a typo was indistinguishable from a real contamination
+  finding. They exit 2 with a sentence now, and 1 and 2 are documented as different
+  things.
+- **`paired` numbered questions by order of arrival when `doc_id` was missing.**
+  That is pairing by position — the thing the function's own docstring warns
+  against, two lines above the line that did it. Silent, and healthy-looking. A
+  file without `doc_id` or `doc_hash` is refused now.
 - **`guard` returned "clean" after reading zero exam text.** A wrong path, or a
   results dump handed over instead of the prompts, yields zero collisions — and
   answering "no collision" there is exactly the lie the tool exists to prevent.
@@ -342,7 +364,7 @@ wennab --help
 # or from a clone, no install:
 git clone https://github.com/benewende-dev/wennab && cd wennab
 python -m wennab twin reference.gguf candidate.gguf
-python -m pytest tests/          # 36 tests, well under two seconds
+python -m pytest tests/          # 48 tests, well under two seconds
 ```
 
 **Three of the four run against files this repository ships**, so you can see real
@@ -408,9 +430,11 @@ someday grow into a platform.
 - **`guard` finds shared wording, not shared meaning.** A paraphrase of an exam
   question shares no 8-gram and will pass. n=8 is a floor on contamination, not a
   proof of independence.
-- **`paired` needs both runs to have seen the same questions.** It refuses rather
-  than pairs on the intersection, which is correct and also means two runs made
-  with different `--limit` values are simply not comparable here.
+- **`paired` needs both runs to have seen the same questions, and to say which.**
+  It refuses rather than pairs on the intersection, which is correct and also means
+  two runs made with different `--limit` values are simply not comparable here. A
+  samples file carrying no `doc_id` or `doc_hash` is refused outright, because the
+  only remaining way to pair it would be by position.
 - **`twin` compares type maps, not values.** Identical maps and zero bytes apart
   do not mean the two files are close; they mean the difference between them is
   the one you introduced, which is the whole point.

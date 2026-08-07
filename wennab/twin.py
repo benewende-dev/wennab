@@ -55,16 +55,21 @@ def differences(reference: pathlib.Path, candidate: pathlib.Path) -> list[dict]:
     ref, cand = type_map(reference), type_map(candidate)
     ref_sizes, cand_sizes = sizes(reference), sizes(candidate)
 
+    # Parcouru sur la *réunion* des deux noms, pas sur la référence seule. En
+    # ne lisant que `ref.items()`, un tenseur présent chez le candidat et absent
+    # de la référence n'existait pas : deux fichiers d'architectures différentes
+    # ressortaient « identical type maps », code 0, avec « difference +64 B »
+    # imprimé deux lignes plus bas. Le titre démentait le chiffre en dessous.
     groupes: dict[tuple[str, str, str], list[int]] = defaultdict(list)
     octets: dict[tuple[str, str, str], int] = defaultdict(int)
-    for nom, t_ref in ref.items():
-        t_cand = cand.get(nom)
-        if t_cand is None or t_cand == t_ref:
+    for nom in sorted(set(ref) | set(cand)):
+        t_ref, t_cand = ref.get(nom), cand.get(nom)
+        if t_ref == t_cand:
             continue
         m = re.match(r"blk\.(\d+)\.(.+)", nom)
-        cle = (m.group(2) if m else nom, t_cand, t_ref)
+        cle = (m.group(2) if m else nom, t_cand or "absent", t_ref or "absent")
         groupes[cle].append(int(m.group(1)) if m else -1)
-        octets[cle] += ref_sizes[nom] - cand_sizes.get(nom, 0)
+        octets[cle] += ref_sizes.get(nom, 0) - cand_sizes.get(nom, 0)
 
     sortie = []
     for (suffixe, depuis, vers), couches in sorted(groupes.items()):

@@ -24,8 +24,10 @@ up. That is why 1 and 2 are not the same code.
 """
 from __future__ import annotations
 
+import json
 import pathlib
 import sys
+import tomllib
 
 from . import __version__
 from . import corpus as m_corpus
@@ -34,23 +36,54 @@ from . import paired as m_paired
 from . import twin as m_twin
 
 
+class Usage(ValueError):
+    """L'invocation est fautive : rien n'a pu tourner, donc code 2."""
+
+
+# Ce qu'un fichier d'entrée peut légitimement lever, et qui veut dire « je n'ai
+# pas pu lire ça » plutôt que « le contrôle a échoué ». Nommées une par une : un
+# `except ValueError` attraperait aussi les bogues de calcul et les ferait passer
+# pour des soucis de chemin, ce qui est la faute d'un cran au-dessus.
+ILLISIBLE = (FileNotFoundError, IsADirectoryError, PermissionError, UnicodeDecodeError,
+             json.JSONDecodeError, tomllib.TOMLDecodeError,
+             m_corpus.RegistryError, m_paired.MismatchedRuns, Usage)
+
+
+def _entier(argv: list[str], prefixe: str, defaut: int) -> int:
+    """`--bytes=abc` doit dire ce qui ne va pas, pas remonter la pile."""
+    brut = next((a.split("=", 1)[1] for a in argv if a.startswith(prefixe)), None)
+    if brut is None:
+        return defaut
+    try:
+        return int(brut)
+    except ValueError:
+        raise Usage(f"{prefixe}{brut} is not a whole number") from None
+
+
 def _corpus(argv: list[str]) -> int:
+    if not argv:
+        raise Usage("usage: wennab corpus <registry.toml> [--bytes=N] [--seed=N]")
+    # Validés ici bien que `corpus.main` les relise : c'est la validation qui
+    # compte, et elle doit rendre 2 avec une phrase plutôt que la pile de int().
+    _entier(argv, "--bytes=", 180_000)
+    _entier(argv, "--seed=", 20260803)
     return m_corpus.main(argv)
 
 
 def _guard(argv: list[str]) -> int:
-    if "--against" not in argv:
-        print("usage: wennab guard <corpus.txt> --against <files...>", file=sys.stderr)
-        return 2
+    if not argv or argv[0].startswith("--") or "--against" not in argv:
+        raise Usage("usage: wennab guard <corpus.txt> --against <files...>")
     coupe = argv.index("--against")
-    corpus = pathlib.Path(argv[0]).read_text(encoding="utf-8")
     fichiers = [pathlib.Path(a) for a in argv[coupe + 1:] if not a.startswith("--")]
     if not fichiers:
-        print("no exam files given after --against", file=sys.stderr)
-        return 2
-    n = int(next((a.split("=")[1] for a in argv if a.startswith("--n=")), 8))
+        raise Usage("no exam files given after --against")
+    n = _entier(argv, "--n=", 8)
 
-    r = m_guard.check(corpus, m_guard.load_exams(fichiers), n=n)
+    corpus = pathlib.Path(argv[0]).read_text(encoding="utf-8")
+    # `n` passé au chargement autant qu'au contrôle : le filtre qui écarte les
+    # chaînes trop courtes pour collisionner doit suivre le n demandé, sans quoi
+    # il écarte des épreuves qui collisionnent vraiment.
+    r = m_guard.check(corpus, m_guard.load_exams(fichiers, n=n), n=n)
     print(m_guard.report(r, verbeux="--verbose" in argv))
     return 0 if r["clean"] else 1
 
@@ -74,8 +107,7 @@ def _twin(argv: list[str]) -> int:
         entrees += [pathlib.Path(a) for a in argv[1:] if not a.startswith("--")]
     manquants = [p for p in entrees if not p.is_file()]
     if manquants:
-        print(f"cannot read {manquants[0]}", file=sys.stderr)
-        return 2
+        raise Usage(f"cannot read {manquants[0]}")
 
     if emet:
         cible = argv[argv.index("--emit") + 1]
@@ -89,8 +121,7 @@ def _twin(argv: list[str]) -> int:
 
     positionnels = [a for a in argv if not a.startswith("--")]
     if len(positionnels) < 2:
-        print("usage: wennab twin <reference.gguf> <candidate.gguf>", file=sys.stderr)
-        return 2
+        raise Usage("usage: wennab twin <reference.gguf> <candidate.gguf>")
     # Code 1 quand les cartes de types diffèrent, comme `guard`. Sortir 0 sur
     # « these files are NOT a valid pair » laissait la seule commande qui
     # constate une comparaison faussée incapable de l'arrêter : la phrase
@@ -103,15 +134,10 @@ def _twin(argv: list[str]) -> int:
 def _paired(argv: list[str]) -> int:
     positionnels = [a for a in argv if not a.startswith("--")]
     if len(positionnels) < 2:
-        print("usage: wennab paired <run-a> <run-b>", file=sys.stderr)
-        return 2
-    metrique = next((a.split("=")[1] for a in argv if a.startswith("--metric=")), "acc_norm")
+        raise Usage("usage: wennab paired <run-a> <run-b>")
+    metrique = next((a.split("=", 1)[1] for a in argv if a.startswith("--metric=")), "acc_norm")
     a, b = pathlib.Path(positionnels[0]), pathlib.Path(positionnels[1])
-    try:
-        r = m_paired.mcnemar(m_paired.outcomes(a, metrique), m_paired.outcomes(b, metrique))
-    except m_paired.MismatchedRuns as e:
-        print(f"cannot pair these runs: {e}", file=sys.stderr)
-        return 2
+    r = m_paired.mcnemar(m_paired.outcomes(a, metrique), m_paired.outcomes(b, metrique))
     print(m_paired.report(r, (a.name, b.name)))
     return 0
 
@@ -132,7 +158,21 @@ def main(argv: list[str] | None = None) -> int:
         print(f"unknown command {argv[0]!r}\n", file=sys.stderr)
         print(__doc__.strip(), file=sys.stderr)
         return 2
-    return commande(argv[1:])
+
+    # Ce qui n'a pas pu être lu sort en 2, avec une phrase. Sans ce point de
+    # passage, un chemin mal tapé remontait la pile de Python — donc **code 1**,
+    # celui d'un contrôle qui a tourné et a échoué. Dans un journal de CI, une
+    # faute de frappe devenait indiscernable d'une vraie contamination : la
+    # panne prenait l'apparence exacte du résultat. Neuf chemins étaient dans ce
+    # cas, sur les trois commandes autres que `twin`.
+    try:
+        return commande(argv[1:])
+    except ILLISIBLE as e:
+        chemin = getattr(e, "filename", None)
+        print(f"{e}" if isinstance(e, Usage) else
+              f"cannot read {chemin}: {e}" if chemin else f"cannot run: {e}",
+              file=sys.stderr)
+        return 2
 
 
 # Without this guard, `python -m wennab.cli twin a.gguf b.gguf` — the line the

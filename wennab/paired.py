@@ -54,9 +54,15 @@ def outcomes(chemin: pathlib.Path | str, metric: str = "acc_norm") -> dict[str, 
     Keyed by document id rather than by position: two runs can order their
     documents differently, and pairing by position would then compare
     unrelated questions while looking perfectly healthy.
+
+    A file carrying neither `doc_id` nor `doc_hash` is refused rather than
+    numbered by arrival order. The fallback that numbered them was silent, and
+    it reinstated precisely the pairing this function exists to avoid — the
+    docstring warned against it two lines above the line that did it.
     """
+    fichier = _fichier(chemin)
     resultats: dict[str, bool] = {}
-    with _fichier(chemin).open() as f:
+    with fichier.open() as f:
         for ligne in f:
             if not ligne.strip():
                 continue
@@ -66,8 +72,13 @@ def outcomes(chemin: pathlib.Path | str, metric: str = "acc_norm") -> dict[str, 
                 valeur = e.get("acc")
             if valeur is None:
                 continue
-            cle = str(e.get("doc_id", e.get("doc_hash", len(resultats))))
-            resultats[cle] = bool(round(float(valeur)))
+            cle = e.get("doc_id", e.get("doc_hash"))
+            if cle is None:
+                raise MismatchedRuns(
+                    f"{fichier.name} carries no doc_id or doc_hash, so its questions "
+                    f"cannot be paired — only lined up in the order they were written, "
+                    f"which compares unrelated questions when the runs differ in order")
+            resultats[str(cle)] = bool(round(float(valeur)))
     return resultats
 
 

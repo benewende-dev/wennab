@@ -19,7 +19,9 @@ you cleared it by a mile or by one word.
     wennab guard corpus.txt --against prompts.json tasks/*.txt
 
 Any file works: .json (every string value is scanned, at any depth), .jsonl,
-or plain text.
+or plain text. Strings shorter than n words are skipped, since they cannot
+collide — and the skip follows `--n`, because a filter fixed at 8 while the
+check runs at 5 hides collisions instead of saving work.
 """
 from __future__ import annotations
 
@@ -52,21 +54,30 @@ def _strings(objet) -> list[str]:
     return []
 
 
-def load_exams(chemins: list[pathlib.Path] | list[str]) -> list[tuple[str, str]]:
-    """(label, text) for everything the corpus must stay clear of."""
+def load_exams(chemins: list[pathlib.Path] | list[str],
+               n: int = 8) -> list[tuple[str, str]]:
+    """(label, text) for everything the corpus must stay clear of.
+
+    `n` must be the same n the check will use. A string shorter than n words
+    cannot collide, so dropping it costs nothing; dropping it at a *fixed* 8
+    while the caller checks at 5 costs a false pass. Measured on the version
+    that hardcoded it: a JSON holding a thirty-word exam and a six-word one,
+    the six-word exam sitting whole inside the corpus, `--n=5` — one exam of
+    two read, zero collisions, a tick, exit 0. The filter now follows n.
+    """
     epreuves: list[tuple[str, str]] = []
     for chemin in chemins:
         chemin = pathlib.Path(chemin)
         brut = chemin.read_text(encoding="utf-8")
         if chemin.suffix == ".json":
             for i, s in enumerate(_strings(json.loads(brut))):
-                if len(s.split()) >= 8:  # short strings cannot collide at n=8
+                if len(s.split()) >= n:
                     epreuves.append((f"{chemin.name}[{i}]", s))
         elif chemin.suffix == ".jsonl":
             for i, ligne in enumerate(brut.splitlines()):
                 if ligne.strip():
                     for s in _strings(json.loads(ligne)):
-                        if len(s.split()) >= 8:
+                        if len(s.split()) >= n:
                             epreuves.append((f"{chemin.name}:{i}", s))
         else:
             epreuves.append((chemin.name, brut))
