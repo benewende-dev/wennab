@@ -56,7 +56,15 @@ $ wennab twin reference.gguf candidate.gguf
   ssm_beta.weight             IQ4_XS → Q8_0      18 of them       +313,344
   ssm_out.weight              IQ4_XS → Q5_K      18 of them    +11,796,480
 
+  reference 1,162,034,432 B
+  candidate 1,185,000,704 B
   difference +22,966,272 B
+
+Measuring these two against each other mixes the type map with whatever
+else you changed. Rebuild the candidate with:
+  wennab twin reference.gguf --emit types.txt
+  llama-quantize --imatrix yours.imatrix --tensor-type-file types.txt \
+      source-BF16.gguf candidate.gguf <TYPE>
 ```
 
 Then replay the reference's map so the two builds differ by one thing only:
@@ -68,6 +76,8 @@ $ llama-quantize --imatrix yours.imatrix --tensor-type-file types.txt \
 
 $ wennab twin reference.gguf candidate.gguf
 identical type maps (320 tensors)
+  reference 1,162,034,432 B
+  candidate 1,162,034,432 B
   difference +0 B
 
 These two files differ only in tensor *values*. Any measured difference between them
@@ -75,6 +85,11 @@ is attributable to whatever produced those values.
 ```
 
 That second run is the one that makes everything downstream mean something.
+
+Both blocks are the command's own output against the two 1.16 GB files of the case study —
+the published build and our rebuild — with nothing removed and the paths shortened. They are
+the one thing here you cannot rerun from a clone: a repository has no business shipping a
+gigabyte of weights.
 
 ## `wennab corpus` — a calibration corpus you can reproduce and read
 
@@ -85,8 +100,8 @@ No real documents, so nothing unpublishable; no scraped legal text, so no licens
 $ wennab corpus registries/enterprise-fr.toml --bytes=180000 > corpus.txt
   184 documents, 180,329 bytes, 27,895 words
   4-gram diversity : 0.495
-  fr : 103/184 documents (56 %)
   en : 81/184 documents (44 %)
+  fr : 103/184 documents (56 %)
 ```
 
 Diversity is printed, not assumed, because it is the ceiling on what this method can do.
@@ -165,10 +180,10 @@ runs an exact McNemar test.
 $ wennab paired runs/reference runs/candidate
 200 questions, paired by document id
 
-  reference   134/200  (0.670)
-  candidate   136/200  (0.680)
+  reference               134/200  (0.670)
+  candidate               136/200  (0.680)
 
-  agree       196/200  (98%)
+  agree                   196/200  (98%)
   reference only right : 1
   candidate only right : 3
 
