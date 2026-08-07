@@ -7,6 +7,11 @@ reads a reference text. Change the text, change the rounding. Most published
 GGUFs inherit a calibration computed by someone else on generic English, for a
 workload that is not yours.
 
+A registry holds `[entities]` — lists to draw from — and `[numbers]`, whose
+entries draw `randrange(min, max) * unit`. Note that `max` is exclusive and
+that `unit` multiplies the bounds rather than striding between them; both are
+documented on `_decor` and enforced by `load`, which refuses an unknown field.
+
 Why generated rather than collected. Real documents in a professional register
 are usually the ones you cannot publish, and public legal corpora arrive with
 unclear licensing. A registry file holds entities and hand-written sentence
@@ -42,6 +47,9 @@ class RegistryError(ValueError):
     """The registry file is missing something the generator needs."""
 
 
+CHAMPS_NOMBRE = {"min", "max", "unit", "format"}
+
+
 def load(chemin: pathlib.Path | str) -> dict:
     chemin = pathlib.Path(chemin)
     registre = tomllib.loads(chemin.read_text(encoding="utf-8"))
@@ -51,6 +59,32 @@ def load(chemin: pathlib.Path | str) -> dict:
     for g in registre["genres"]:
         if "id" not in g or "blocks" not in g:
             raise RegistryError(f"{chemin}: every genre needs an id and blocks")
+
+    # Un champ inconnu dans [numbers] est refusé, et `step` nommément. Il
+    # s'appelait ainsi et il multipliait : le renommer sans refuser l'ancien
+    # nom aurait laissé les registres écrits avant retomber sur unit = 1,
+    # c'est-à-dire des montants mille fois plus petits, sans un mot. Une
+    # correction qui se trahit en silence ne vaut pas mieux que le défaut.
+    for nom, spec in registre.get("numbers", {}).items():
+        if not isinstance(spec, dict):
+            raise RegistryError(f"{chemin}: [numbers].{nom} must be a table")
+        if "step" in spec:
+            raise RegistryError(
+                f"{chemin}: [numbers].{nom} uses `step`, which was renamed `unit` "
+                f"because it multiplies min and max rather than striding between "
+                f"them. Rename it to keep the same values.")
+        inconnus = sorted(set(spec) - CHAMPS_NOMBRE)
+        if inconnus:
+            raise RegistryError(
+                f"{chemin}: [numbers].{nom} has unknown field(s) {', '.join(inconnus)} "
+                f"— expected {', '.join(sorted(CHAMPS_NOMBRE))}")
+        for borne in ("min", "max"):
+            if borne not in spec:
+                raise RegistryError(f"{chemin}: [numbers].{nom} needs a {borne}")
+        if int(spec["min"]) >= int(spec["max"]):
+            raise RegistryError(
+                f"{chemin}: [numbers].{nom} has min {spec['min']} >= max {spec['max']}, "
+                f"and max is exclusive, so it can draw nothing")
     return registre
 
 
@@ -60,12 +94,19 @@ def _decor(alea: random.Random, entites: dict, nombres: dict) -> dict:
     Drawn per document rather than per sentence: a memo whose city changes
     between its header and its signature is not a memo, and the model would be
     calibrated on text no human would write.
+
+    A `[numbers]` entry draws `randrange(min, max) * unit`. So **`max` is
+    exclusive** — `{min = 2024, max = 2027}` never yields 2027 — and `unit`
+    multiplies both bounds rather than striding between them: `{min = 750,
+    max = 96000, unit = 1000}` prints 755,000 to 95,999,000, not 750 to 96,000.
+    Both are stated because neither is what the words suggest, and the output
+    stays plausible either way, so nothing in the corpus would give it away.
     """
     decor = {cle: alea.choice(valeurs) for cle, valeurs in entites.items()}
     for cle, spec in nombres.items():
         bas, haut = int(spec["min"]), int(spec["max"])
-        pas = int(spec.get("step", 1))
-        valeur = alea.randrange(bas, haut) * pas
+        unite = int(spec.get("unit", 1))
+        valeur = alea.randrange(bas, haut) * unite
         fmt = spec.get("format", "plain")
         if fmt == "spaced":
             decor[cle] = f"{valeur:,}".replace(",", " ")

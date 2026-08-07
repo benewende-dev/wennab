@@ -12,6 +12,7 @@ calcul, c'est le câblage autour.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import pathlib
@@ -62,6 +63,64 @@ def test_registre_incomplet_rejete(tmp_path):
     mauvais.write_text('name = "x"\n[entities]\nville = ["Abidjan"]\n')
     with pytest.raises(corpus.RegistryError):
         corpus.load(mauvais)
+
+
+def test_le_corpus_livre_ne_bouge_pas(tmp_path):
+    """Empreinte du corpus aux trois tailles publiées.
+
+    La diversité seule ne suffit pas : deux corpus différents peuvent la
+    partager. Ces trois empreintes ont été relevées avant le renommage de
+    `step` en `unit` et vérifiées identiques après, ce qui est toute la preuve
+    que le renommage ne touchait qu'un nom.
+    """
+    attendu = {
+        180_000: "bf9e51010c22d08daa22fa478e4d19139a2f5d91",
+        240_000: "d041f4435435fd32c97c5114414aefee3c920066",
+        330_000: "075f0fb6c730c4baa5a6ef655c802a48b5c54421",
+    }
+    registre = corpus.load(RACINE / "registries" / "enterprise-fr.toml")
+    for octets, empreinte in attendu.items():
+        texte, _ = corpus.generate(registre, octets, 20260803)
+        assert hashlib.sha1(texte.encode()).hexdigest() == empreinte, (
+            f"le corpus à {octets} B a changé — les chiffres publiés ne tiennent plus")
+
+
+def test_step_est_refuse_pas_ignore(tmp_path):
+    """Renommer sans refuser l'ancien nom aurait divisé les montants par mille.
+
+    `spec.get("unit", 1)` sur un registre écrit avec `step` retombe sur 1 : les
+    montants deviennent mille fois plus petits, le texte reste plausible, et
+    rien ne le dit. Une correction qui se trahit en silence ne vaut pas mieux
+    que le défaut qu'elle corrige.
+    """
+    base = (RACINE / "registries" / "enterprise-fr.toml").read_text(encoding="utf-8")
+    vieux = tmp_path / "vieux.toml"
+    vieux.write_text(base.replace("unit = 1000", "step = 1000"), encoding="utf-8")
+    with pytest.raises(corpus.RegistryError, match="step"):
+        corpus.load(vieux)
+
+
+def test_champ_inconnu_dans_numbers_est_refuse(tmp_path):
+    registre = tmp_path / "r.toml"
+    registre.write_text(
+        '[entities]\nville = ["Ouagadougou"]\n'
+        '[numbers]\nmontant = { min = 1, max = 9, unite = 1000 }\n'
+        '[[genres]]\nid = "x"\nlanguage = "fr"\nblocks = [["{ville} {montant}"]]\n',
+        encoding="utf-8")
+    with pytest.raises(corpus.RegistryError, match="unknown field"):
+        corpus.load(registre)
+
+
+def test_bornes_vides_refusees(tmp_path):
+    """max est exclusif, donc min == max ne peut rien tirer."""
+    registre = tmp_path / "r.toml"
+    registre.write_text(
+        '[entities]\nville = ["Ouagadougou"]\n'
+        '[numbers]\njour = { min = 5, max = 5 }\n'
+        '[[genres]]\nid = "x"\nlanguage = "fr"\nblocks = [["{ville} {jour}"]]\n',
+        encoding="utf-8")
+    with pytest.raises(corpus.RegistryError, match="exclusive"):
+        corpus.load(registre)
 
 
 def test_diversite_texte_repete():

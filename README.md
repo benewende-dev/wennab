@@ -142,7 +142,10 @@ chunks against the 80 of the calibration we were replacing.
 the generator draws from them under a fixed seed, so the same registry and the same
 `--seed` reproduce the corpus byte for byte on any machine. Each document's cast —
 city, company, dates, amounts — is drawn once and reused across all its blocks, so a
-memo does not change town between its header and its signature. Diversity is the
+memo does not change town between its header and its signature. Unknown fields in a
+registry are refused rather than ignored, since a field silently doing nothing is
+how a corpus ends up a thousandfold off with entirely plausible-looking numbers in
+it. Diversity is the
 share of distinct 4-grams, printed with every run because it is the ceiling on what
 a generated corpus can do, and a ceiling you assume is a ceiling you will exceed on
 paper.
@@ -364,7 +367,7 @@ wennab --help
 # or from a clone, no install:
 git clone https://github.com/benewende-dev/wennab && cd wennab
 python -m wennab twin reference.gguf candidate.gguf
-python -m pytest tests/          # 48 tests, well under two seconds
+python -m pytest tests/          # 52 tests, well under two seconds
 ```
 
 **Three of the four run against files this repository ships**, so you can see real

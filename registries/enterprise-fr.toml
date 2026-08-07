@@ -451,10 +451,22 @@ ref2 = [
   "2026-40",
   "2026-41",
 ]
+# A value is drawn as `randrange(min, max) * unit`. Two consequences worth
+# stating, because neither is what the words suggest and the output looks
+# reasonable either way:
+#
+#   · max is EXCLUSIVE. { min = 2024, max = 2027 } never yields 2027.
+#   · unit MULTIPLIES both bounds, it does not stride between them. The line
+#     below draws 755,000 to 95,999,000 FCFA, not 750 to 96,000 — which is the
+#     intent here, since these are contract amounts in FCFA.
+#
+# The field was called `step` until it was renamed for saying the opposite of
+# what it did. A registry still using `step` is refused rather than read with
+# unit = 1, which would silently divide every amount by a thousand.
 [numbers]
-montant   = { min = 750, max = 96000, step = 1000, format = "spaced" }
-montant2  = { min = 120, max = 9800,  step = 1000, format = "spaced" }
-amount    = { min = 12,  max = 940,   step = 1000, format = "grouped" }
+montant   = { min = 750, max = 96000, unit = 1000, format = "spaced" }
+montant2  = { min = 120, max = 9800,  unit = 1000, format = "spaced" }
+amount    = { min = 12,  max = 940,   unit = 1000, format = "grouped" }
 jour      = { min = 1,   max = 29 }
 jour2     = { min = 1,   max = 29 }
 annee     = { min = 2024, max = 2027 }
