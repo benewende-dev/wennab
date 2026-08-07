@@ -19,8 +19,21 @@ prononce autrement de façon imprévisible. Ne pas les « corriger » en repassa
 aux chiffres — les sous-titres, eux, refont le chemin inverse et affichent `0.625`
 là où la voix dit *zero point six two five*.
 
-Deux mots à surveiller : **`McNemar`** s'écrit `Mc Nemar` dans le texte parlé,
-sinon la voix tente un seul mot ; **`p`** s'écrit `p` et se prononce bien seul.
+Trois pièges, tous mesurés en réécoutant la piste :
+
+- **`McNemar`** s'écrit `Mc Nemar` dans le texte parlé, sinon la voix tente un
+  seul mot.
+- **`wennab` ne se dit jamais devant un sous-commande.** Écrit d'un bloc, le
+  moteur le colle au mot suivant : « wennab guard » est ressorti *Winograd* et
+  « wennab twin » *WinAbdTwin* — le nom de l'outil disparaissait dans un autre
+  mot. Un trait d'union sépare bien, mais déplace l'accent sur la seconde
+  syllabe. La narration dit donc **« the twin command »**, « the guard command »,
+  « the paired command » : l'écran, lui, montre `wennab twin` en toutes lettres.
+  Le nom ne se prononce plus que seul, deux fois, là où rien ne peut s'y coller.
+  Diagnostiqué en transcrivant la piste, variante par variante.
+- **`p`** s'écrit `p` et se prononce bien seul.
+
+
 
 ## Règle qui tient tout
 
@@ -71,7 +84,7 @@ puis celle du contrôle après rejeu de la carte des types.
 > First: the two files differ by more than the thing under test. We rebuilt a
 > two-billion-parameter model with our own importance matrix, and it came out
 > twenty-three megabytes heavier than the file we meant to beat. It would have
-> been easy to credit our calibration for the accuracy difference. Wennab twin
+> been easy to credit our calibration for the accuracy difference. The twin command
 > reads the tensor type map off both files: the extra weight came from the
 > publisher's map, not from us. Replay that map, rebuild, ask again — identical
 > type maps, three hundred and twenty tensors, zero bytes apart.
@@ -84,8 +97,8 @@ code de sortie 1.
 > Second: the calibration corpus contains the exam. A matrix calibrated on a text
 > protects the weights that text activates, so evaluation prompts in the corpus
 > improve the marks without improving the model. Writing the corpus yourself
-> makes that more likely, not less. Wennab guard compares the two, eight words at
-> a time. This one clears: the longest run shared with any of the seventeen exam
+> makes that more likely, not less. The guard command compares the two, eight words
+> at a time. This one clears: the longest run shared with any of the seventeen exam
 > texts is five words. Paste one exam back in and it refuses — sixty-nine
 > collisions, exit code one.
 
@@ -94,8 +107,8 @@ code de sortie 1.
 **À l'écran** : la sortie réelle de `wennab paired`, révélée bloc par bloc.
 
 > Third: two totals are not a comparison. The standard error of a zero point six
-> seven score over two hundred questions is three point three points. Wennab
-> paired reads the per-question outcomes the harness already writes, pairs them
+> seven score over two hundred questions is three point three points. The paired command
+> reads the per-question outcomes the harness already writes, pairs them
 > by document identifier, and runs an exact Mc Nemar test. One hundred and
 > ninety-six of two hundred answers identical. p equals zero point six two five.
 > Four questions separate these models. Consistent with chance.

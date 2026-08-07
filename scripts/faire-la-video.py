@@ -49,7 +49,7 @@ MARGE_V, MARGE_H = 48, 56
 CHASSE = 0.6
 FPS = 25
 BLANC_FIN = 0.6          # respiration après la dernière phrase d'un segment
-MOTS_PAR_SECONDE = 2.45  # mesuré sur les narrations déjà tournées, pour --sec
+MOTS_PAR_SECONDE = 2.45  # mesuré sur les narrations déjà tournées, faute de piste
 
 
 # --------------------------------------------------------------------------
@@ -332,23 +332,59 @@ def en_chiffres(phrase: str) -> str:
     return phrase
 
 
+def pauses(piste: pathlib.Path | None) -> list[float]:
+    """Les silences internes d'une piste, en secondes, par leur milieu.
+
+    Un moteur de synthèse marque les fins de phrase par une pause. Les relever
+    coûte un passage de ffmpeg et vaut mieux qu'un partage au prorata des
+    caractères : une phrase courte et lente et une phrase longue et rapide ont
+    le même nombre de signes et pas la même durée."""
+    if piste is None:
+        return []
+    fait = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(piste), "-af",
+                           "silencedetect=n=-40dB:d=0.15", "-f", "null", "-"],
+                          capture_output=True, text=True)
+    debuts, milieux = [], []
+    for ligne in fait.stderr.splitlines():
+        if "silence_start:" in ligne:
+            debuts.append(float(ligne.split("silence_start:")[1].strip()))
+        elif "silence_end:" in ligne and debuts:
+            fin = float(ligne.split("silence_end:")[1].split("|")[0].strip())
+            milieux.append((debuts.pop() + fin) / 2)
+    return milieux
+
+
 def horodater(secondes: float) -> str:
     h, reste = divmod(secondes, 3600)
     m, s = divmod(reste, 60)
     return f"{int(h):02d}:{int(m):02d}:{s:06.3f}".replace(".", ",")
 
 
-def sous_titres(textes: list[str], durees: list[float]) -> str:
-    """Un cue par phrase, réparti au prorata du nombre de caractères."""
+def sous_titres(textes: list[str], durees: list[float],
+                pistes: list[pathlib.Path | None]) -> str:
+    """Un cue par phrase, calé sur les pauses réelles de la voix.
+
+    Le prorata des caractères donne une première borne ; on la fait glisser
+    jusqu'à la pause la plus proche à moins de deux secondes. Faute de pause,
+    le prorata reste — il ne fait jamais pire qu'avant."""
     cues, depart, n = [], 0.0, 1
-    for texte, d in zip(textes, durees):
+    for texte, d, piste in zip(textes, durees, pistes):
         phrases = [p.strip() for p in re.split(r"(?<=[.:—]) (?=[A-Z])", texte) if p.strip()]
         total = sum(len(p) for p in phrases)
-        t = depart
-        for p in phrases:
-            part = d * len(p) / total
-            cues.append(f"{n}\n{horodater(t)} --> {horodater(t + part)}\n{en_chiffres(p)}\n")
-            t += part
+        libres = pauses(piste)
+
+        bornes, t = [], 0.0
+        for p in phrases[:-1]:
+            t += d * len(p) / total
+            proche = min(libres, key=lambda m: abs(m - t), default=None)
+            bornes.append(proche if proche is not None and abs(proche - t) < 2.0 else t)
+        bornes.append(d)
+
+        precedente = 0.0
+        for p, fin in zip(phrases, bornes):
+            cues.append(f"{n}\n{horodater(depart + precedente)} --> "
+                        f"{horodater(depart + fin)}\n{en_chiffres(p)}\n")
+            precedente = fin
             n += 1
         depart += d
     return "\n".join(cues)
@@ -396,6 +432,14 @@ def main() -> int:
                 mp3 = travail / f"seg{i + 1}.mp3"
                 lancer(["ffmpeg", "-y", "-i", str(brut), "-b:a", "128k", str(mp3)])
                 pistes.append(mp3)
+            elif args.voix:
+                # Une piste manquante donnait un plan muet, dans un fichier de la
+                # bonne durée, sans un mot d'avertissement : la panne prenait
+                # l'apparence exacte du succès. C'est le défaut que ce dépôt
+                # existe pour attraper ; il n'a pas sa place dans sa propre vidéo.
+                sys.exit(f"{piste} manque — monter sans elle donnerait un segment "
+                         f"muet qui ressemble à un segment réussi. Fournir la piste, "
+                         f"ou demander --brouillon.")
             else:
                 pistes.append(None)
 
@@ -432,8 +476,15 @@ def main() -> int:
             sonore = travail / f"s{i}.mp4"
             son = (["-i", str(piste)] if piste
                    else ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"])
+            # `apad` : le silence de fin doit exister *dans la piste*, pas être
+            # laissé au démuxeur. Sans lui, la piste d'un segment est plus courte
+            # que son plan, la concaténation recolle les sons bout à bout, et la
+            # voix prend six dixièmes d'avance par segment — deux secondes au
+            # cinquième. Mesuré : la voix de s5 partait à 113,0 s pour un plan
+            # commençant à 115,0 s. Rien ne le signale, l'image reste juste.
             lancer(["ffmpeg", "-y", "-i", str(muet), *son,
                     "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+                    "-af", f"apad=whole_dur={d:.3f}",
                     "-c:a", "aac", "-b:a", "160k", "-t", f"{d:.3f}", str(sonore)])
             morceaux.append(sonore)
 
@@ -443,7 +494,8 @@ def main() -> int:
         lancer(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(final),
                 "-c", "copy", str(cible)])
 
-    (args.out / "wennab.srt").write_text(sous_titres(textes, durees), encoding="utf-8")
+    (args.out / "wennab.srt").write_text(sous_titres(textes, durees, pistes),
+                                          encoding="utf-8")
     totale = duree(cible)
     print(f"{cible} — {totale:.1f} s, {cible.stat().st_size // 1024} kB")
     print(f"{args.out / 'wennab.srt'} — sous-titres depuis le texte prononcé")

@@ -1,13 +1,14 @@
 # La vidéo — moins de trois minutes
 
-**Faite le 7 août 2026 : 2 min 24, 1080p, voix Liam, sous-titres anglais.**
+**Montage prêt et vérifié ; il attend la voix définitive.** Une première prise
+faite le 7 août 2026 a été rejetée pour deux défauts, décrits plus bas.
 
 Pour l'**Arm Create: AI Optimization Challenge**, échéance **14 août 2026,
 16 h 00 PDT**. Ce fichier dit *quoi filmer* ;
 [`docs/narration.md`](narration.md) dit *quoi dire*, mot à mot.
 
-Durées mesurées des cinq pistes, et donc des cinq plans : 18,0 s · 34,3 s ·
-31,9 s · 30,8 s · 29,0 s.
+Le montage se cale sur la durée mesurée de chaque piste ; les valeurs ci-dessous
+seront celles de la prise retenue.
 
 ## Ce que le règlement exige, et ce qu'il n'exige pas
 
@@ -81,6 +82,30 @@ occupera après repli (`fenetre()`). Le dernier palier d'un segment est toujours
 celui qui porte le chiffre — `+0 B`, `exit code 1`, `p = 0.625` — et il doit être
 lisible en entier.
 
+## Les deux défauts de la première prise
+
+**Un décalage cumulatif entre la voix et l'image.** Le plan durait la piste plus
+six dixièmes de respiration, mais ce silence n'était pas *dans* la piste : il
+était laissé au démuxeur. La concaténation recolle alors les sons bout à bout, et
+la voix prend six dixièmes d'avance par segment. Mesuré en transcrivant le
+montage avec horodatage au mot : la voix du segment 5 partait à 113,0 s pour un
+plan commençant à 115,0 s — deux secondes. Rien ne le signale : l'image est
+juste, la voix est juste, seul leur rapport est faux. Corrigé par `apad`, qui
+inscrit le silence dans la piste. Après correction : +0,23 s, +0,30 s, +0,40 s —
+le seul décalage restant est le silence de tête de chaque piste, et il est
+souhaitable.
+
+**Le nom de l'outil disparaissait dans un autre mot.** Le moteur collait
+`wennab` au sous-commande qui suit : « wennab guard » ressortait *Winograd*,
+« wennab twin » *WinAbdTwin*. Un trait d'union sépare bien, mais déplace
+l'accent. La narration dit donc désormais « the twin command », « the guard
+command », « the paired command », et ne prononce le nom que seul, deux fois,
+là où rien ne peut s'y coller.
+
+Les deux ont été trouvés en **transcrivant la piste montée** et en comparant les
+horodatages aux frontières de plan. Écouter ne suffisait pas : le décalage d'une
+demi-seconde ne s'entend pas, il se mesure.
+
 ## Voix et sous-titres
 
 Les cinq pistes s'enregistrent **séparément**, une par segment, dans
@@ -92,7 +117,11 @@ l'inverse.
 rythme avant d'enregistrer pour de bon. Elles ne servent qu'au cadrage.
 
 Les sous-titres sont **générés depuis le texte prononcé**, pas depuis une
-transcription automatique : le texte est déjà écrit, autant qu'il soit exact. Ils
+transcription automatique : le texte est déjà écrit, autant qu'il soit exact.
+Leur minutage, lui, est calé sur les **pauses réelles** relevées dans chaque
+piste (`pauses()`), et non sur un partage au prorata des caractères : une phrase
+courte et lente et une phrase longue et rapide ont le même nombre de signes et
+pas la même durée. Ils
 font le chemin inverse de la voix — la narration écrit *zero point six two five*
 pour que le moteur le prononce bien, le sous-titre affiche `0.625` pour que l'œil
 le retrouve à l'écran.
