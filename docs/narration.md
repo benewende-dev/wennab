@@ -1,5 +1,8 @@
 # La narration, mot à mot
 
+**Dite le 7 août 2026 : 2 min 24, voix Liam.** Ce qui suit est le texte exact
+qui a été prononcé — pas un brouillon.
+
 Texte destiné à la vidéo de soumission de l'**Arm Create: AI Optimization
 Challenge** (échéance 14 août 2026, 16 h 00 PDT). La vidéo y est *optionnelle* ;
 elle est faite quand même, parce que le barème accorde vingt-cinq points sur cent
@@ -33,15 +36,15 @@ problème.
 
 ## Les cinq segments
 
-| segment | plan | mots | durée visée |
+| segment | plan | mots | audio mesuré |
 |---|---|---|---|
-| s1 | 0:00 – 0:21 | 52 | ~21 s |
-| s2 | 0:21 – 0:56 | 88 | ~35 s |
-| s3 | 0:56 – 1:30 | 84 | ~34 s |
-| s4 | 1:30 – 1:59 | 71 | ~29 s |
-| s5 | 1:59 – 2:32 | 82 | ~33 s |
+| s1 | 0:00 – 0:18 | 51 | 17,4 s |
+| s2 | 0:18 – 0:52 | 88 | 33,7 s |
+| s3 | 0:52 – 1:24 | 83 | 31,3 s |
+| s4 | 1:24 – 1:55 | 72 | 30,2 s |
+| s5 | 1:55 – 2:24 | 81 | 28,4 s |
 
-**Total visé : 377 mots, environ 2 min 32.** Le règlement coupe à trois minutes
+**Total : 375 mots, 2 min 24.** Le règlement coupe à trois minutes
 (« Judges are not required to watch beyond three minutes »), et la marge est
 volontaire : la durée réelle de chaque piste est mesurée au montage, et c'est
 elle qui fixe la longueur du plan, pas l'inverse.

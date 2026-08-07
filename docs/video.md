@@ -1,8 +1,13 @@
 # La vidéo — moins de trois minutes
 
+**Faite le 7 août 2026 : 2 min 24, 1080p, voix Liam, sous-titres anglais.**
+
 Pour l'**Arm Create: AI Optimization Challenge**, échéance **14 août 2026,
 16 h 00 PDT**. Ce fichier dit *quoi filmer* ;
 [`docs/narration.md`](narration.md) dit *quoi dire*, mot à mot.
+
+Durées mesurées des cinq pistes, et donc des cinq plans : 18,0 s · 34,3 s ·
+31,9 s · 30,8 s · 29,0 s.
 
 ## Ce que le règlement exige, et ce qu'il n'exige pas
 
