@@ -102,3 +102,11 @@ def main(argv: list[str] | None = None) -> int:
         print(__doc__.strip(), file=sys.stderr)
         return 2
     return commande(argv[1:])
+
+
+# Sans cette garde, `python -m wennab.cli twin a.gguf b.gguf` — la ligne que le
+# README donnait pour lancer l'outil depuis un clone — importe le module, ne
+# rend rien et **sort avec le code 0**. Un succès sans une ligne de sortie :
+# exactement le mode de panne que ce dépôt existe pour attraper.
+if __name__ == "__main__":
+    sys.exit(main())

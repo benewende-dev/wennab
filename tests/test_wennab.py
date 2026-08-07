@@ -9,6 +9,8 @@ from __future__ import annotations
 import json
 import math
 import pathlib
+import subprocess
+import sys
 import textwrap
 
 import pytest
@@ -223,3 +225,25 @@ def test_cas_reel_du_depot():
     assert r["reference_right"] == 134
     assert r["candidate_right"] == 136
     assert math.isclose(r["p_value"], 0.625)
+
+
+# ———————————————————————————— les points d'entrée ————————————————————————————
+
+@pytest.mark.parametrize("module", ["wennab", "wennab.cli"])
+def test_le_module_lance_vraiment_quelque_chose(module):
+    """Les deux formes de `python -m` doivent afficher l'aide.
+
+    `wennab/cli.py` n'avait pas de garde `__main__` : la ligne que le README
+    donnait pour lancer l'outil depuis un clone importait le module, n'écrivait
+    rien et **sortait avec le code 0**. Un succès muet — le mode de panne que
+    tout ce dépôt existe pour attraper, dans le dépôt lui-même.
+
+    Le test passe par un sous-processus à dessein : appeler `cli.main()` en
+    Python aurait réussi tout du long, puisque la fonction n'a jamais été en
+    cause. C'est *l'invocation* qui était cassée.
+    """
+    fait = subprocess.run([sys.executable, "-m", module, "--help"],
+                          cwd=RACINE, capture_output=True, text=True)
+    assert fait.returncode == 0, fait.stderr
+    assert "wennab corpus" in fait.stdout, (
+        f"`python -m {module} --help` n'a rien affiché : {fait.stdout!r}")

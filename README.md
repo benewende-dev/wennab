@@ -205,9 +205,21 @@ wennab --help
 
 # or from a clone, no install:
 git clone https://github.com/benewende-dev/wennab && cd wennab
-python -m wennab.cli twin reference.gguf candidate.gguf
-python -m pytest tests/          # 25 tests, well under a second
+python -m wennab twin reference.gguf candidate.gguf
+python -m pytest tests/          # 27 tests, well under a second
 ```
+
+**Two of the four run against files this repository ships**, so you can see real
+output before you quantise anything:
+
+```bash
+python -m wennab corpus registries/enterprise-fr.toml --bytes=180000 > /dev/null
+python -m wennab paired case-study/results/reference-arc_easy-200.jsonl \
+                        case-study/results/candidate-arc_easy-200.jsonl
+```
+
+Both reproduce the numbers printed above exactly — the corpus table and the null
+result are not transcriptions.
 
 Python 3.11+. `gguf` is the only dependency and only `twin` needs it — the other three read plain
 text and JSON, deliberately, so they run on anything.
