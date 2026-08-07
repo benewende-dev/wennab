@@ -18,6 +18,11 @@ number measured between them is attributable to that variable.
     wennab twin reference.gguf candidate.gguf          # what differs, and by how much
     wennab twin reference.gguf --emit types.txt        # a --tensor-type-file for llama-quantize
 
+Differing type maps exit **1**, like a failed `guard`. The first version printed
+"these files are NOT a valid pair" and exited 0, which left the one command that
+can see a comparison already spoiled unable to stop it: the sentence went into a
+log nobody rereads, and the measurement went ahead.
+
 The emitted file feeds `llama-quantize --tensor-type-file`, so the control is
 produced by the standard toolchain rather than by anything of ours.
 """
@@ -95,8 +100,22 @@ def emit(reference: pathlib.Path, baseline: pathlib.Path | None = None) -> list[
     return lignes
 
 
-def report(reference: pathlib.Path, candidate: pathlib.Path) -> str:
+def compare(reference: pathlib.Path, candidate: pathlib.Path) -> tuple[str, list[dict]]:
+    """Le rapport lisible, et les écarts qui le motivent.
+
+    Rendus ensemble parce que l'appelant a besoin des deux : `wennab twin`
+    imprime le rapport *et* décide de son code de sortie, et recalculer les
+    écarts pour cette seule décision rouvrirait les deux fichiers.
+    """
     diffs = differences(reference, candidate)
+    return _texte(reference, candidate, diffs), diffs
+
+
+def report(reference: pathlib.Path, candidate: pathlib.Path) -> str:
+    return compare(reference, candidate)[0]
+
+
+def _texte(reference: pathlib.Path, candidate: pathlib.Path, diffs: list[dict]) -> str:
     a, b = sum(sizes(reference).values()), sum(sizes(candidate).values())
 
     if not diffs:

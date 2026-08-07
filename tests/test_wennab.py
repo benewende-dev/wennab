@@ -1,8 +1,14 @@
-"""Tests for the three commands that need no model file.
+"""Tests for the commands that need no model file.
 
-`twin` is exercised against real GGUFs in the case study rather than here: a
-fixture GGUF would be either a toy that proves nothing or a gigabyte in the
-repository.
+L'*analyse* de `twin` — quel groupe de tenseurs a bougé, de combien d'octets —
+s'éprouve contre les deux vrais GGUF de l'étude de cas, pas ici : un fichier
+d'essai serait un jouet qui ne prouve rien, et le vrai pèse un gigaoctet.
+
+Son **code de sortie**, lui, se teste ici, parce qu'il ne dépend d'aucune
+propriété du modèle : deux tenseurs de quatre par quatre suffisent à ce que les
+cartes de types diffèrent, et c'est tout ce que la décision regarde. C'est la
+même leçon que la garde `__main__` plus bas — ce qui casse, ce n'est pas le
+calcul, c'est le câblage autour.
 """
 from __future__ import annotations
 
@@ -292,6 +298,79 @@ def test_cas_reel_du_depot():
     assert r["reference_right"] == 134
     assert r["candidate_right"] == 136
     assert math.isclose(r["p_value"], 0.625)
+
+
+# —————————————————————————————————— twin ——————————————————————————————————
+
+def _gguf(chemin: pathlib.Path, dtype) -> pathlib.Path:
+    """Le plus petit GGUF valide qui porte une carte de types lisible.
+
+    Deux tenseurs de 4×4, écrits par `gguf` lui-même : ce que `twin` regarde
+    est le nom du type, jamais une valeur.
+    """
+    import numpy as np
+    from gguf import GGUFWriter
+
+    w = GGUFWriter(str(chemin), "test")
+    for couche in (0, 1):
+        w.add_tensor(f"blk.{couche}.attn_qkv.weight", np.zeros((4, 4), dtype=dtype))
+    w.write_header_to_file()
+    w.write_kv_data_to_file()
+    w.write_tensors_to_file()
+    w.close()
+    return chemin
+
+
+def test_paire_invalide_sort_1(tmp_path, capsys):
+    """La phrase « NOT a valid pair » doit pouvoir arrêter une chaîne.
+
+    La première version l'imprimait et sortait 0 : la seule commande qui voit
+    une comparaison déjà faussée était incapable de la stopper. Vérifié qu'il
+    échoue sur l'ancien code, qui rendait 0 avec exactement cette sortie.
+    """
+    import numpy as np
+
+    a = _gguf(tmp_path / "reference.gguf", np.float32)
+    b = _gguf(tmp_path / "candidate.gguf", np.float16)
+    assert cli.main(["twin", str(a), str(b)]) == 1
+    assert "NOT a valid pair" in capsys.readouterr().out
+
+
+def test_paire_valide_sort_0(tmp_path, capsys):
+    import numpy as np
+
+    a = _gguf(tmp_path / "reference.gguf", np.float32)
+    b = _gguf(tmp_path / "candidate.gguf", np.float32)
+    assert cli.main(["twin", str(a), str(b)]) == 0
+    assert "identical type maps" in capsys.readouterr().out
+
+
+def test_fichier_absent_sort_2_sans_trace_d_appels(tmp_path, capsys):
+    """2 veut dire « n'a pas pu tourner », et se distingue de 1.
+
+    Sans ce contrôle, un chemin mal tapé remontait la pile du lecteur GGUF :
+    illisible, et impossible à distinguer d'un échec de contrôle dans un
+    journal de CI.
+    """
+    import numpy as np
+
+    a = _gguf(tmp_path / "reference.gguf", np.float32)
+    assert cli.main(["twin", str(a), str(tmp_path / "absent.gguf")]) == 2
+    assert "cannot read" in capsys.readouterr().err
+
+
+def test_emit_n_exige_pas_que_sa_cible_existe(tmp_path):
+    """La cible de `--emit` est écrite, pas lue.
+
+    Le contrôle des chemins l'a d'abord prise pour une entrée manquante et
+    rendait 2 sans rien produire.
+    """
+    import numpy as np
+
+    a = _gguf(tmp_path / "reference.gguf", np.float32)
+    cible = tmp_path / "types.txt"
+    assert cli.main(["twin", str(a), "--emit", str(cible)]) == 0
+    assert cible.is_file()
 
 
 # ———————————————————————————— les points d'entrée ————————————————————————————

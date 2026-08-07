@@ -62,7 +62,7 @@ Cinq segments, chacun de la durée exacte de son audio.
 | s2 | terminal | `twin` sur deux vrais GGUF de 1,16 Go, puis le témoin à zéro octet près |
 | s3 | terminal | `corpus`, `guard` qui passe, `guard` qui refuse avec le code 1 |
 | s4 | terminal | `paired` : 196 sur 200, p = 0,625 |
-| s5 | terminal, puis carte | les trois outils chronométrés sur le M1, les 32 tests, et la machine |
+| s5 | terminal, puis carte | les trois outils chronométrés sur le M1, les 36 tests, et la machine |
 
 Chaque segment se révèle par paliers — un palier par phrase de la narration —
 et chaque palier reste affiché jusqu'au suivant. Un palier pèse ce qu'il ajoute

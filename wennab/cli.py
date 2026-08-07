@@ -9,6 +9,18 @@
 Every command reads and writes plain files, and none of them wraps a model
 runner: quantise with llama-quantize, evaluate with lm-evaluation-harness, and
 use these to keep yourself honest in between.
+
+Exit codes, the same three everywhere, so any of these drops into a pipeline:
+
+    0   the check ran and passed
+    1   the check ran and failed — `guard` found a shared n-gram, `twin` found
+        two files that are not a valid pair
+    2   the check could not run — a path that is not there, no exam text read,
+        two runs that do not cover the same questions
+
+A tool that answered 0 when it could not run would turn a broken step into a
+green tick, which is the same fault this repository exists to catch, one level
+up. That is why 1 and 2 are not the same code.
 """
 from __future__ import annotations
 
@@ -50,9 +62,23 @@ def _twin(argv: list[str]) -> int:
               file=sys.stderr)
         return 2
     reference = pathlib.Path(argv[0])
-    if "--emit" in argv:
+    emet = "--emit" in argv
+    base = next((a.split("=")[1] for a in argv if a.startswith("--baseline=")), None)
+
+    # Un chemin absent doit rendre 2 — « le contrôle n'a pas pu tourner » — et
+    # non une trace d'appels. Vérifié ici plutôt qu'en rattrapant l'exception :
+    # le lecteur GGUF ne promet pas laquelle il lève. Seules les *entrées* sont
+    # contrôlées : la cible de `--emit` est un fichier qu'on écrit.
+    entrees = [reference] + ([pathlib.Path(base)] if base else [])
+    if not emet:
+        entrees += [pathlib.Path(a) for a in argv[1:] if not a.startswith("--")]
+    manquants = [p for p in entrees if not p.is_file()]
+    if manquants:
+        print(f"cannot read {manquants[0]}", file=sys.stderr)
+        return 2
+
+    if emet:
         cible = argv[argv.index("--emit") + 1]
-        base = next((a.split("=")[1] for a in argv if a.startswith("--baseline=")), None)
         lignes = m_twin.emit(reference, pathlib.Path(base) if base else None)
         pathlib.Path(cible).write_text("\n".join(lignes) + "\n")
         print(f"{len(lignes)} tensor override(s) → {cible}")
@@ -65,8 +91,13 @@ def _twin(argv: list[str]) -> int:
     if len(positionnels) < 2:
         print("usage: wennab twin <reference.gguf> <candidate.gguf>", file=sys.stderr)
         return 2
-    print(m_twin.report(reference, pathlib.Path(positionnels[1])))
-    return 0
+    # Code 1 quand les cartes de types diffèrent, comme `guard`. Sortir 0 sur
+    # « these files are NOT a valid pair » laissait la seule commande qui
+    # constate une comparaison faussée incapable de l'arrêter : la phrase
+    # partait dans un journal que personne ne relit, et la mesure suivait.
+    texte, ecarts = m_twin.compare(reference, pathlib.Path(positionnels[1]))
+    print(texte)
+    return 1 if ecarts else 0
 
 
 def _paired(argv: list[str]) -> int:

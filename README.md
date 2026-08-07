@@ -22,7 +22,7 @@ or if a corpus holding its own exam ever stops failing.*
 
 | command | the question it answers | exit |
 |---|---|---|
-| [`wennab twin`](#wennab-twin--is-this-even-a-valid-pair) | do these two GGUF files differ by anything but their values? | `0` |
+| [`wennab twin`](#wennab-twin--is-this-even-a-valid-pair) | do these two GGUF files differ by anything but their values? | `1` if not a pair |
 | [`wennab corpus`](#wennab-corpus--a-calibration-corpus-you-can-reproduce-and-read) | what do I calibrate on, when the real documents are unpublishable? | `0` |
 | [`wennab guard`](#wennab-guard--refuse-a-corpus-that-contains-its-own-exam) | does my calibration corpus contain the exam it will be graded on? | `1` on collision |
 | [`wennab paired`](#wennab-paired--compare-question-by-question) | is the gap between two scores distinguishable from chance? | `0` |
@@ -86,7 +86,8 @@ else you changed. Rebuild the candidate with:
       source-BF16.gguf candidate.gguf <TYPE>
 ```
 
-Then replay the reference's map so the two builds differ by one thing only:
+**That run exits 1**, so it stops a build rather than only warning it. Then replay
+the reference's map so the two builds differ by one thing only:
 
 ```console
 $ wennab twin reference.gguf --emit types.txt
@@ -277,12 +278,17 @@ is the whole reason this repository exists.
 
 ---
 
-## Four faults this repository found in itself
+## Five faults this repository found in itself
 
 A tool that refuses unverifiable results has to survive being pointed at its own
 work. Each of these was found by doing that, and each is now held by a test that
 was checked to fail on the old code.
 
+- **`twin` printed "these files are NOT a valid pair" and exited 0.** The one
+  command that can see a comparison already spoiled could not stop it: the sentence
+  went into a log nobody rereads, and the measurement went ahead. It exits 1 now,
+  like a failed `guard`, and a missing path exits 2 instead of raising through the
+  GGUF reader.
 - **`guard` returned "clean" after reading zero exam text.** A wrong path, or a
   results dump handed over instead of the prompts, yields zero collisions — and
   answering "no collision" there is exactly the lie the tool exists to prevent.
@@ -336,7 +342,7 @@ wennab --help
 # or from a clone, no install:
 git clone https://github.com/benewende-dev/wennab && cd wennab
 python -m wennab twin reference.gguf candidate.gguf
-python -m pytest tests/          # 32 tests, well under two seconds
+python -m pytest tests/          # 36 tests, well under two seconds
 ```
 
 **Three of the four run against files this repository ships**, so you can see real
@@ -382,9 +388,10 @@ matters more than it looks: a tool that returned 0 when it could not run would l
 a broken step through as a green tick, which is the same failure, one level up,
 that this repository exists to catch.
 
-`twin` reports and returns 0 even when the files are not a valid pair — it is a
-diagnostic you read before deciding, not a gate. That is a deliberate limit, and it
-is on the list below.
+`twin` gates on the same rule: differing type maps exit **1**. The first version
+printed *"these files are NOT a valid pair"* and exited 0, which left the one
+command that can see a comparison already spoiled unable to stop it — the sentence
+went into a log nobody rereads, and the measurement went ahead.
 
 ## What this does not do
 
@@ -407,9 +414,6 @@ someday grow into a platform.
 - **`twin` compares type maps, not values.** Identical maps and zero bytes apart
   do not mean the two files are close; they mean the difference between them is
   the one you introduced, which is the whole point.
-- **`twin` does not gate.** It exits 0 whatever it finds. Making an invalid pair
-  fail a build is a behaviour change, not a documentation change, so it is not
-  claimed here until it is done and tested.
 
 ## Licence
 
