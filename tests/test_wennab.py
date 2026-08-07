@@ -122,7 +122,20 @@ def test_plus_longue_sequence_rapportee(tmp_path):
     epreuve.write_text("alpha bravo charlie delta echo foxtrot")
     r = guard.check("zoulou alpha bravo charlie yankee", guard.load_exams([epreuve]))
     assert r["longest_overall"] == 3
+    assert not r["longest_truncated"]
     assert r["clean"]
+
+
+def test_sequence_plus_longue_que_le_plafond_est_annoncee_comme_telle():
+    """A search ceiling must not read as a measurement.
+
+    Pasting a whole exam into the corpus gives a shared run of seventy words.
+    Reporting "40" — the bound — understates it with the composure of an exact
+    figure.
+    """
+    suite = [f"m{i}" for i in range(60)]
+    longueur, _, tronquee = guard.longest_shared(suite, suite, plafond=10)
+    assert (longueur, tronquee) == (10, True)
 
 
 # ————————————————————————————————— paired —————————————————————————————————
@@ -212,6 +225,60 @@ def test_diversite_annoncee_dans_le_readme():
     for octets, valeur in attendu.items():
         _, stats = corpus.generate(registre, octets, 20260803)
         assert stats["diversity_4gram"] == valeur, f"{octets} B no longer yields {valeur}"
+
+
+def _corpus_du_depot() -> str:
+    registre = corpus.load(RACINE / "registries" / "enterprise-fr.toml")
+    return corpus.generate(registre, 180_000, 20260803)[0]
+
+
+def _epreuves_du_depot() -> list[pathlib.Path]:
+    return sorted((RACINE / "case-study" / "exams").glob("*.txt"))
+
+
+def test_les_dix_sept_epreuves_sont_bien_la():
+    """The number the README prints is a file count, not a claim.
+
+    `guard` was the only one of the four whose published example rested on files
+    the repository did not ship: the command could not be run at all.
+    """
+    epreuves = _epreuves_du_depot()
+    assert len(epreuves) == 17, [p.name for p in epreuves]
+    assert all(len(p.read_text(encoding="utf-8").split()) >= 30 for p in epreuves)
+
+
+def test_le_corpus_livre_est_disjoint_des_epreuves_livrees():
+    """The README's figures, recomputed from the files this repository ships."""
+    r = guard.check(_corpus_du_depot(), guard.load_exams(_epreuves_du_depot()))
+    assert r["exams"] == 17
+    assert r["corpus_words"] == 28_291
+    assert r["corpus_ngrams"] == 17_880
+    assert r["clean"]
+    assert r["longest_overall"] == 5, r["longest_sequence"]
+    assert r["longest_exam"] == "note-conges.txt"
+
+
+def test_une_epreuve_recollee_dans_le_corpus_est_refusee(tmp_path):
+    """The replay the README offers, down to the exit code.
+
+    This is the fault that actually happened — a template and an exam written by
+    the same hand — reproduced the only honest way: by causing it.
+    """
+    epreuve = RACINE / "case-study" / "exams" / "note-conges.txt"
+    contamine = tmp_path / "contaminated.txt"
+    contamine.write_text(_corpus_du_depot() + epreuve.read_text(encoding="utf-8"),
+                         encoding="utf-8")
+
+    code = cli.main(["guard", str(contamine), "--against",
+                     *[str(p) for p in _epreuves_du_depot()]])
+    assert code == 1, "a corpus holding an exam must fail, and loudly"
+
+
+def test_les_resultats_ne_passent_pas_pour_des_epreuves():
+    """The refusal the README publishes, against this repository's results file."""
+    resultats = RACINE / "case-study" / "results" / "reference-arc_easy-200.jsonl"
+    r = guard.check(_corpus_du_depot(), guard.load_exams([resultats]))
+    assert r["exams"] == 0 and not r["clean"]
 
 
 def test_cas_reel_du_depot():

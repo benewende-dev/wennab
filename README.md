@@ -102,29 +102,59 @@ matrix does not learn one town.
 
 ## `wennab guard` — refuse a corpus that contains its own exam
 
+**The seventeen exam texts ship in this repository**, so this runs from a clone with nothing to
+install and nothing to download: the two published evaluation prompts and the fifteen in-domain
+control tasks, in [`case-study/exams/`](case-study/exams/).
+
 ```console
-$ wennab guard corpus.txt --against metadata.json tasks/*.txt
+$ wennab corpus registries/enterprise-fr.toml --bytes=180000 > corpus.txt
+$ wennab guard corpus.txt --against case-study/exams/*.txt
 corpus : 28,291 words, 17,880 distinct 8-grams
 exams  : 17 text(s)
 
-  ✗ tasks/leave-policy.txt          max  8 words  ← 1 collision(s): « jours ouvrés pour valider ou refuser la demande »
+longest shared run, all exams : 5 words (note-conges.txt)
+  « note de service n 2026 »
 
-✗ 1 shared 8-gram(s). Fix the corpus before computing anything:
-  a corpus containing its own exam marks its own paper.
+✓ no shared 8-gram. The corpus and the evaluation sets are disjoint,
+  so what you measure after recalibration is a real effect.
 ```
 
-That run is the real one, taken before the offending template was rewritten — which is why the
-corpus this repository ships no longer reproduces it. Regenerate the corpus today and the same
-command answers with a longest shared run of two words.
+The longest shared run is printed on a pass too, because a clean result at n=8 does not tell you
+whether you cleared it by a mile or by one word. Here it is five words of ordinary administrative
+formula, and that is the answer you want: not zero — zero would suggest the corpus is not in the
+register — but nowhere near eight.
 
-Exit code 1 on a collision, so it drops straight into a pipeline. Eight consecutive words do not
-coincide between independent texts even in the same register — and the longest shared run is
-printed either way, because a clean pass at n=8 does not tell you whether you cleared it by a mile
-or by one word.
+It did not always pass. An earlier draft of the memo template collided with `note-conges` on eight
+consecutive words; it was rewritten before anything was computed, which is why the corpus shipped
+here clears it. That episode is recorded in [`case-study/`](case-study/#2-the-contamination-check-caught-a-real-fault).
 
-Reading **zero** exam text is also reported as a failure, not a pass. A wrong path, or a results
-dump handed over instead of the prompts, produces zero collisions — and a tool that answered
-"clean" there would be lying in exactly the way this one exists to prevent.
+To watch the refusal for yourself, put an exam into the corpus and ask again:
+
+```console
+$ cat corpus.txt case-study/exams/note-conges.txt > contaminated.txt
+$ wennab guard contaminated.txt --against case-study/exams/*.txt
+  ✗ note-conges.txt                    max ≥40 words  ← 69 collision(s): « 04 le chef de service dispose de 5 »
+
+✗ 69 shared 8-gram(s). Fix the corpus before computing anything:
+  a corpus containing its own exam marks its own paper.
+$ echo $?
+1
+```
+
+Exit code 1 on a collision, so it drops straight into a pipeline.
+
+Reading **zero** exam text is also reported as a failure, not a pass — and that one you can also
+run, by handing it the per-question outcomes instead of the prompts:
+
+```console
+$ wennab guard corpus.txt --against case-study/results/reference-arc_easy-200.jsonl
+exams  : 0 text(s)
+
+✗ no exam text was read. Nothing was compared, so this is not a pass.
+```
+
+A wrong path, or a results dump handed over instead of the prompts, produces zero collisions — and
+a tool that answered "clean" there would be lying in exactly the way this one exists to prevent.
 
 ## `wennab paired` — compare question by question
 
@@ -206,20 +236,22 @@ wennab --help
 # or from a clone, no install:
 git clone https://github.com/benewende-dev/wennab && cd wennab
 python -m wennab twin reference.gguf candidate.gguf
-python -m pytest tests/          # 27 tests, well under a second
+python -m pytest tests/          # 32 tests, well under two seconds
 ```
 
-**Two of the four run against files this repository ships**, so you can see real
+**Three of the four run against files this repository ships**, so you can see real
 output before you quantise anything:
 
 ```bash
-python -m wennab corpus registries/enterprise-fr.toml --bytes=180000 > /dev/null
+python -m wennab corpus registries/enterprise-fr.toml --bytes=180000 > corpus.txt
+python -m wennab guard corpus.txt --against case-study/exams/*.txt
 python -m wennab paired case-study/results/reference-arc_easy-200.jsonl \
                         case-study/results/candidate-arc_easy-200.jsonl
 ```
 
-Both reproduce the numbers printed above exactly — the corpus table and the null
-result are not transcriptions.
+All three reproduce the numbers printed above exactly — the corpus table, the
+contamination check and the null result are not transcriptions. Only `twin` needs
+something this repository cannot ship: two GGUF files.
 
 Python 3.11+. `gguf` is the only dependency and only `twin` needs it — the other three read plain
 text and JSON, deliberately, so they run on anything.

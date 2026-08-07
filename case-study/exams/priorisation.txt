@@ -1,0 +1,6 @@
+Tu assistes le gérant d'une PME de 25 personnes à Ouagadougou. Classe les quatre actions suivantes de la plus urgente à la moins urgente, avec une justification d'une ligne chacune.
+
+a) Une facture fournisseur est échue depuis 40 jours et génère des pénalités de retard.
+b) L'abonnement antivirus du parc informatique a expiré la semaine dernière.
+c) Recruter un stagiaire pour la rentrée de septembre.
+d) Répondre à un appel d'offres public qui ferme dans 3 jours.

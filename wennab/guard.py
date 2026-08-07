@@ -73,18 +73,23 @@ def load_exams(chemins: list[pathlib.Path] | list[str]) -> list[tuple[str, str]]
     return epreuves
 
 
-def longest_shared(a: list[str], b: list[str], plafond: int = 40) -> tuple[int, str]:
-    """Longest run of words present in both, and that run.
+def longest_shared(a: list[str], b: list[str], plafond: int = 40) -> tuple[int, str, bool]:
+    """Longest run of words present in both, that run, and whether it was cut short.
 
     Searched by increasing n and stopped at the first miss, which avoids the
     quadratic table over a thirty-thousand-word corpus.
+
+    The third member says the search stopped on the ceiling rather than on a
+    miss, so the shared run is *at least* `plafond` words. Without it, a corpus
+    holding a whole seventy-four-word exam reports "40 words" — a figure with
+    the composure of a measurement, understating the fault it is reporting.
     """
-    meilleure = (0, "")
+    meilleure = (0, "", False)
     for n in range(1, plafond + 1):
         commun = ngrams(a, n) & ngrams(b, n)
         if not commun:
-            break
-        meilleure = (n, sorted(commun)[0])
+            return meilleure
+        meilleure = (n, sorted(commun)[0], n == plafond)
     return meilleure
 
 
@@ -99,18 +104,19 @@ def check(corpus: str, epreuves: list[tuple[str, str]], n: int = 8) -> dict:
     mots_corpus = words(corpus)
     grammes_corpus = ngrams(mots_corpus, n)
 
-    lignes, collisions, record = [], 0, (0, "", "")
+    lignes, collisions, record = [], 0, (0, "", False, "")
     for nom, texte in epreuves:
         suite = words(texte)
         communs = ngrams(suite, n) & grammes_corpus
-        longueur, sequence = longest_shared(suite, mots_corpus)
+        longueur, sequence, tronquee = longest_shared(suite, mots_corpus)
         if longueur > record[0]:
-            record = (longueur, sequence, nom)
+            record = (longueur, sequence, tronquee, nom)
         if communs:
             collisions += len(communs)
         lignes.append({
             "exam": nom, "collisions": len(communs), "longest": longueur,
-            "sequence": sequence, "example": sorted(communs)[0] if communs else None,
+            "longest_truncated": tronquee, "sequence": sequence,
+            "example": sorted(communs)[0] if communs else None,
         })
     return {
         "n": n,
@@ -120,7 +126,8 @@ def check(corpus: str, epreuves: list[tuple[str, str]], n: int = 8) -> dict:
         "collisions": collisions,
         "longest_overall": record[0],
         "longest_sequence": record[1],
-        "longest_exam": record[2],
+        "longest_truncated": record[2],
+        "longest_exam": record[3],
         "per_exam": lignes,
         "clean": collisions == 0 and len(epreuves) > 0,
     }
@@ -130,8 +137,9 @@ def report(r: dict, verbeux: bool = False) -> str:
     lignes = [
         f"corpus : {r['corpus_words']:,} words, {r['corpus_ngrams']:,} distinct "
         f"{r['n']}-grams",
-        f"exams  : {r['exams']} text(s)\n",
+        f"exams  : {r['exams']} text(s)",
     ]
+    detaillees = len(lignes)
     for e in sorted(r["per_exam"], key=lambda x: -x["longest"]):
         if not verbeux and e["collisions"] == 0 and e["longest"] < 6:
             continue
@@ -141,17 +149,23 @@ def report(r: dict, verbeux: bool = False) -> str:
             detail = f"  ← {e['collisions']} collision(s): « {e['example']} »"
         elif e["longest"] >= 6:
             detail = f"  ← « {e['sequence']} »"
-        lignes.append(f"  {marque} {e['exam']:<34} max {e['longest']:>2} words{detail}")
+        borne = "≥" if e["longest_truncated"] else " "
+        lignes.append(
+            f"  {marque} {e['exam']:<34} max {borne}{e['longest']:>2} words{detail}")
+    if len(lignes) > detaillees:
+        lignes.insert(detaillees, "")   # no blank line when nothing is listed
 
     if r["exams"] == 0:
         return "\n".join(lignes + [
+            "",
             "✗ no exam text was read. Nothing was compared, so this is not a pass.",
             "  Check the paths, and that the files hold prompts rather than results:",
             "  strings shorter than 8 words are skipped, since they cannot collide at n=8.",
         ])
 
-    lignes.append(f"\nlongest shared run, all exams : {r['longest_overall']} words "
-                  f"({r['longest_exam']})")
+    lignes.append(f"\nlongest shared run, all exams : "
+                  f"{'at least ' if r['longest_truncated'] else ''}"
+                  f"{r['longest_overall']} words ({r['longest_exam']})")
     if r["longest_sequence"]:
         lignes.append(f"  « {r['longest_sequence']} »")
 

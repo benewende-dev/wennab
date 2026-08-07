@@ -1,0 +1,5 @@
+Three messages from a client thread are below. In two sentences, state what was agreed and what we must do next.
+
+[1] Client: "Our order GH-2291 for 400 units was due on 12 May. Where is it?"
+[2] Us: "We can ship 250 units this week; the remaining 150 depend on a supplier delivery."
+[3] Client: "Send the 250 now, and confirm a firm date for the rest by Friday."

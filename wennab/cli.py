@@ -104,9 +104,9 @@ def main(argv: list[str] | None = None) -> int:
     return commande(argv[1:])
 
 
-# Sans cette garde, `python -m wennab.cli twin a.gguf b.gguf` — la ligne que le
-# README donnait pour lancer l'outil depuis un clone — importe le module, ne
-# rend rien et **sort avec le code 0**. Un succès sans une ligne de sortie :
-# exactement le mode de panne que ce dépôt existe pour attraper.
+# Without this guard, `python -m wennab.cli twin a.gguf b.gguf` — the line the
+# README gave for running the tool from a clone — imports the module, prints
+# nothing and **exits 0**. A success with no output: exactly the failure mode
+# this repository exists to catch.
 if __name__ == "__main__":
     sys.exit(main())

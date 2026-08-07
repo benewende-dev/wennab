@@ -36,17 +36,32 @@ being replaced. A matrix estimated on repetition over-weights whatever repeats.
 ## 2. The contamination check caught a real fault
 
 `wennab guard` compared the corpus against all 17 evaluation prompts — the 2 published test
-prompts and 15 in-domain control tasks. It found an **eight-word collision**:
+prompts and 15 in-domain control tasks. All seventeen are in [`exams/`](exams/), so this step
+is the one part of the case study that reruns end to end from a clone:
 
-```
-corpus   : « Le responsable hiérarchique dispose de cinq jours ouvrés pour valider ou refuser la demande. »
-exam     : « Le chef de service dispose de 5 jours ouvrés pour valider ou refuser la demande. »
-                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```console
+$ wennab corpus registries/enterprise-fr.toml --bytes=180000 > corpus.txt
+$ wennab guard corpus.txt --against case-study/exams/*.txt
+corpus : 28,291 words, 17,880 distinct 8-grams
+exams  : 17 text(s)
+
+longest shared run, all exams : 5 words (note-conges.txt)
+  « note de service n 2026 »
+
+✓ no shared 8-gram. The corpus and the evaluation sets are disjoint,
+  so what you measure after recalibration is a real effect.
 ```
 
-Both had been written by the same person, in the same register, weeks apart. The template was
-rewritten; the longest shared run fell to five words — *« à compter du 1er septembre »*, an
-ordinary administrative formula. Only then did we compute anything.
+It did not pass the first time. An earlier draft of the memo template shared **eight consecutive
+words** with `note-conges.txt` — the sentence giving a manager five working days to approve or
+refuse a leave request — because the template and the task had been written by the same person, in
+the same register, weeks apart. Neither text was copied from the other; that is the point. The
+template was rewritten and the longest shared run fell to five words, an ordinary administrative
+formula. Only then did we compute anything.
+
+The corpus that ships is the rewritten one, so the collision no longer reproduces — a fixed fault
+does not. What reproduces is the check, in both directions: paste `exams/note-conges.txt` back into
+the corpus and `guard` refuses it with exit code 1, quoting the run word for word.
 
 ## 3. The first rebuild was not comparable, and it looked good
 
